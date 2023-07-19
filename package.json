@@ -1,0 +1,21 @@
+{
+    "name": "com.AdvocacyDigitalMedia.ADM-ToolKit",
+    "version": "1.0.0",
+    "displayName": "ADM ToolKit",
+    "description": "This is a package that provides the necessary scripts and API tools for a standardized UI and Input system for ADM's 3D Interactives",
+    "unity": "2022.3.4",
+  "dependencies": {
+    "com.unity.cinemachine": "2.9.7",
+    "com.unity.timeline": "2.9.7",
+    "com.unity.textmeshpro": "3.0.6",
+    "com.unity.render-pipelines.universal": "14.0.8",
+    "com.unity.shadergraph": "14.0.8",
+    "com.unity.recorder": "4.0.1",
+    "com.unity.inputsystem": "1.6.3"
+  },
+  "author": {
+    "name": "Elijah Jackson",
+    "email": "elijah@advocacydm.com",
+    "url": "https://advocacydm.com/"
+  }
+}
