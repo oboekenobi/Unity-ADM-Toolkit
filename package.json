@@ -1,5 +1,5 @@
 {
-  "name": "com.AdvocacyDigitalMedia.ADM-ToolKit",
+  "name": "com.adm.adm-toolkit",
   "version": "1.0.0",
   "displayName": "ADM ToolKit",
   "description": "This is a package that provides the necessary scripts and API tools for a standardized UI and Input system for ADM's 3D Interactives",
