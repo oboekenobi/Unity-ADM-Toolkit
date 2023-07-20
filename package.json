@@ -6,7 +6,7 @@
   "unity": "2022.3",
   "dependencies": {
     "com.unity.cinemachine": "2.9.7",
-    "com.unity.timeline": "2.9.7",
+    "com.unity.timeline": "1.7.5",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.render-pipelines.universal": "14.0.8",
     "com.unity.shadergraph": "14.0.8",
