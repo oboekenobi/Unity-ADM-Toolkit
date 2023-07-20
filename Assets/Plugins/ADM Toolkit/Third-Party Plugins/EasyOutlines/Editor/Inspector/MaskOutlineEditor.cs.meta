@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bd026f1ae5783654fbb7a3e545d79f0d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 215947
+  packageName: Easy Outline Shader
+  packageVersion: 2.2.1
+  assetPath: Assets/EasyOutlines/Editor/Inspector/MaskOutlineEditor.cs
+  uploadId: 555841

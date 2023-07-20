@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Slider picking-mode="Ignore" value="0" high-value="1" style="justify-content: center; align-self: center; flex-shrink: initial; padding-left: 30px; padding-right: 30px; -unity-text-outline-color: rgba(255, 0, 0, 0);" />
+</ui:UXML>

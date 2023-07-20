@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:ScrollView mode="VerticalAndHorizontal" style="width: 100%; height: 100%; max-height: 100%; max-width: 100%; min-width: 100%; min-height: 100%; flex-wrap: wrap;">
+        <ui:VisualElement name="ContentViewContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Presentation%20Slides/Slide%20Materials/Hill/Slide%20Images/Hill-C2%20Fracutres/35D%20-%20Cervical%20Spine.png?fileID=21300000&amp;guid=fa33467488ad87b43b1666cb488873ce&amp;type=3#35D - Cervical Spine&apos;); flex-wrap: wrap; width: 376px; flex-shrink: 1; flex-basis: auto; flex-direction: column; -unity-background-scale-mode: scale-to-fit; height: 305px; max-height: 100%; min-height: 100%; min-width: 100%; max-width: 100%; justify-content: flex-start;" />
+    </ui:ScrollView>
+</ui:UXML>
