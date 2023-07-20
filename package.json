@@ -1,9 +1,9 @@
 {
-    "name": "com.AdvocacyDigitalMedia.ADM-ToolKit",
-    "version": "1.0.0",
-    "displayName": "ADM ToolKit",
-    "description": "This is a package that provides the necessary scripts and API tools for a standardized UI and Input system for ADM's 3D Interactives",
-    "unity": "2022.3.4",
+  "name": "com.AdvocacyDigitalMedia.ADM-ToolKit",
+  "version": "1.0.0",
+  "displayName": "ADM ToolKit",
+  "description": "This is a package that provides the necessary scripts and API tools for a standardized UI and Input system for ADM's 3D Interactives",
+  "unity": "2022.3.4",
   "dependencies": {
     "com.unity.cinemachine": "2.9.7",
     "com.unity.timeline": "2.9.7",
