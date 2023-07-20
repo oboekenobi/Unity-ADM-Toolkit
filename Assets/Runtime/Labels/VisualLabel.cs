@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using geniikw.DataRenderer2D;
-using TMPro;
-using ADM.UISystem;
 
 [ExecuteInEditMode]
 public class VisualLabel : MonoBehaviour
