@@ -14,7 +14,7 @@ public class Effects_Manager : MonoBehaviour
     public static Effects_Manager _instance;
     public CanvasGroup ContrastLayer;
     public InputManager cam;
-    public Material Background;
+    //public Material Background;
     public Material OutlineMaterial;
     public Shader ADMShaderGraph;
     public List<Material> RayMaterials = new List<Material>();
@@ -57,7 +57,7 @@ public class Effects_Manager : MonoBehaviour
     {
         if(projectManager != null)
         {
-            Background.SetColor("_Top", projectManager.toolkitManager.BackgroundColor);
+            //Background.SetColor("_Top", projectManager.toolkitManager.BackgroundColor);
         }
     }
 
@@ -93,7 +93,7 @@ public class Effects_Manager : MonoBehaviour
     {
         RayMaterials = ActiveXRayMaterials;
     }
-    public void TransitionBackground(float duration, bool Active)
+    /*public void TransitionBackground(float duration, bool Active)
     {
         if (Active)
         {
@@ -105,10 +105,11 @@ public class Effects_Manager : MonoBehaviour
         {
             StartCoroutine(ColorTransition(Background, EndBakcgroundColor, StartBackgroundColor, duration, "_Top"));
         }
-    }
+    }*/
 
     private SortingGroup sortingGroup;
     public float CurrentSmoothness;
+
     /*public void FadeToXray(Material fadeObject, float duration)
     {
         //fadeObject.renderQueue = 3050;

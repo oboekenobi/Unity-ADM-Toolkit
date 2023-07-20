@@ -221,14 +221,10 @@ public class ProjectManager : MonoBehaviour
 
             Camera.main.backgroundColor = BackgroundColor;
 
-            uI_Manager.LoadDefaultPlayerPrefs();
-
-            /*if(CanRecordSequence)
+            if(uI_Manager != null)
             {
-                EditorApplication.ExecuteMenuItem("Window/General/Recorder/Recorder Window");
-                if(EditorApplication.ExecuteMenuItem)
-
-            }*/
+                uI_Manager.LoadDefaultPlayerPrefs();
+            }
         }
 
 
