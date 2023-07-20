@@ -1,1 +1,0 @@
-#define CENTER float2(0.5f,0.5f)
