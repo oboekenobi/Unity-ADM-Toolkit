@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine.Playables;
 using UnityEngine.UIElements;
 using System;
-using FFmpegOut;
-using ADM.UISystem;
+//using FFmpegOut;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
-using UnityEditor.TerrainTools;
 
 namespace ADM.UISystem
 {
@@ -25,7 +22,7 @@ namespace ADM.UISystem
         public Effects_Manager Transition;
         public ProjectManager projectManager;
         public PresentationSection PreviousPresentationSection;
-        public CameraCapture cameraCapture;
+        //public CameraCapture cameraCapture;
         public DrawWithMouse drawManager;
 
         //This changes and sets the control panel whenever the CurrentControlPanel value is set
@@ -258,7 +255,7 @@ namespace ADM.UISystem
             HelpScreenInfo.RegisterCallback<MouseDownEvent>(evt => OpenStartInfoPanel());
             m_mouseSensitivitySlider?.RegisterValueChangedCallback(ev => ChangeMouseSensitivity(m_mouseSensitivitySlider.value));
 
-            m_recordButton?.RegisterCallback<ClickEvent>(evt => CaptureScreenRecording());
+           // m_recordButton?.RegisterCallback<ClickEvent>(evt => CaptureScreenRecording());
             m_rememberMySettingsToggle?.RegisterCallback<ClickEvent>(evt => SetRememberSettings(m_rememberMySettingsToggle.value));
 
 
@@ -673,7 +670,7 @@ namespace ADM.UISystem
 
             }
         }
-        public void ReadjustPopout(OnMouseDrag evt)
+        /*public void ReadjustPopout(OnMouseDrag evt)
         {
             float MousePosition = evt.position.x;
 
@@ -681,7 +678,7 @@ namespace ADM.UISystem
 
             m_popoutLayout.style.minWidth = new Length(MousePosition, LengthUnit.Pixel);
             Debug.Log("Popout Readjusting");
-        }
+        }*/
 
         public void ChangeMouseSensitivity(float value)
         {
@@ -745,7 +742,7 @@ namespace ADM.UISystem
             PlayerPrefs.SetFloat("PenStroke", m_penStrokeSlider.value);
         }
 
-        public void CaptureScreenRecording()
+        /*public void CaptureScreenRecording()
         {
             if (screenIsRecording)
             {
@@ -765,7 +762,7 @@ namespace ADM.UISystem
                 cameraCapture.enabled = true;
                 screenIsRecording = true;
             }
-        }
+        }*/
 
         public void PickTheme(int Selection)
         {

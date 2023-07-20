@@ -11,7 +11,6 @@ using Cinemachine.PostFX;
 using UnityEngine.UIElements;
 using static ADM.UISystem.PopupManager;
 using TMPro;
-using Unity.VectorGraphics;
 using System.ComponentModel;
 
 [ExecuteInEditMode]
