@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 75d7f53171663c44399bdadb4b50994f
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 215947
+  packageName: Easy Outline Shader
+  packageVersion: 2.2.1
+  assetPath: Assets/EasyOutlines/EasyOutlinesURP.unitypackage
+  uploadId: 555841

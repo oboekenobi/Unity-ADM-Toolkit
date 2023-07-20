@@ -1,0 +1,50 @@
+.PrimaryBase-color {
+    background-color: rgb(32, 32, 32);
+}
+
+.SecondaryBase-color {
+    background-color: rgb(58, 58, 58);
+}
+
+.Highlight-color {
+    background-color: rgb(25, 156, 194);
+}
+
+.TertiaryBase-color {
+}
+
+.Text1-color {
+}
+
+.Text2-color {
+}
+
+.Border-color {
+}
+
+.TextBody {
+    -unity-font-definition: url('project://database/Assets/Branding%20Resources/OpenSans_SemiCondensed-Regular.ttf?fileID=12800000&guid=4dff4f58d5b0db747a2b986814e11c8f&type=3#OpenSans_SemiCondensed-Regular');
+    font-size: 40px;
+}
+
+.TextTitle {
+    -unity-font-definition: url('project://database/Assets/Branding%20Resources/OpenSans_SemiCondensed-Light.ttf?fileID=12800000&guid=c825e6395becd8b4db6ce13708f2acb6&type=3#OpenSans_SemiCondensed-Light');
+    letter-spacing: 10px;
+}
+
+.TextureTint {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+    background-color: rgba(229, 229, 229, 0.98);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left-color: rgb(91, 91, 91);
+    border-right-color: rgb(91, 91, 91);
+    border-top-color: rgb(91, 91, 91);
+    border-bottom-color: rgb(91, 91, 91);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}

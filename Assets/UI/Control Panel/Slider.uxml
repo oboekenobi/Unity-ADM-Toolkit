@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Slider.uss?fileID=7433441132597879392&amp;guid=a0d2fb49eade5354c9a6cfa8a48543e1&amp;type=3#Slider" />
+    <ui:VisualElement class="PrimaryBase-color" style="flex-grow: 0; flex-direction: row; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+        <ui:Label tabindex="-1" text="IPLURBIS UNU&lt;" display-tooltip-when-elided="true" name="Title" class="Text1-color" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(39, 39, 39, 0); -unity-text-outline-width: 0; -unity-font-style: bold;" />
+        <ui:Slider picking-mode="Ignore" value="42" high-value="100" name="Slider" class="horizontalSlider" style="max-height: 55px; height: 55px; min-height: 55px; font-size: 30px; -unity-font-definition: initial; -unity-font: url(&apos;project://database/Assets/Plugins/ADM%20Interactive%20Toolkit/Branding%20Resources/OpenSans_SemiCondensed-Regular.ttf?fileID=12800000&amp;guid=4dff4f58d5b0db747a2b986814e11c8f&amp;type=3#OpenSans_SemiCondensed-Regular&apos;); -unity-font-style: normal; flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>
