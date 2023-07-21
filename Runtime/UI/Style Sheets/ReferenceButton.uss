@@ -1,5 +1,4 @@
 #SectionButton .unity-radio-button__input:checked {
-    background-color: rgb(91, 91, 91);
     cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
     border-left-color: rgb(89, 89, 89);
     border-right-color: rgb(89, 89, 89);
@@ -17,23 +16,20 @@
 }
 
 #SectionButton .unity-radio-button__input {
-    background-color: rgb(196, 196, 196);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     width: 100%;
     height: 100%;
-    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 5px;
     padding-right: 5px;
+    align-items: center;
 }
 
 #SectionButton:hover {
@@ -91,7 +87,6 @@
     text-overflow: ellipsis;
     white-space: normal;
     cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
-    color: rgb(0, 0, 0);
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
@@ -101,18 +96,15 @@
     margin-top: 0;
     margin-bottom: 0;
     -unity-font-definition: initial;
-    -unity-font: url('project://database/Assets/Plugins/FFmpegUnityBind2-main/FFmpegUnityBind2-main/Assets/GigaVideoPlayer/DefaultTheme/Font/OpenSans-Regular.ttf?fileID=12800000&guid=88934f32c38090545a5f0a994f665fa9&type=3#OpenSans-Regular');
+    -unity-font: url('project://database/Packages/com.adm.adm-toolkit/Runtime/Branding%20Resources/OpenSans-Bold.ttf?fileID=12800000&guid=ff6ac19fe2f9a014a9cad9a5948d6d45&type=3#OpenSans-Bold');
 }
 
 #SectionButton .unity-radio-button__input:checked .unity-radio-button__text {
-    color: rgb(255, 255, 255);
     -unity-text-align: middle-center;
     -unity-text-outline-width: 1px;
     -unity-font-style: normal;
-    -unity-text-outline-color: rgb(12, 74, 103);
     text-shadow: 0 0 0 rgb(0, 0, 0);
-    -unity-font-definition: initial;
-    -unity-font: url('project://database/Assets/Plugins/ADM%20Interactive%20Toolkit/Branding%20Resources/OpenSans-Bold.ttf?fileID=12800000&guid=ff6ac19fe2f9a014a9cad9a5948d6d45&type=3#OpenSans-Bold');
+    -unity-font: url('project://database/Packages/com.adm.adm-toolkit/Runtime/Branding%20Resources/OpenSans-Bold.ttf?fileID=12800000&guid=ff6ac19fe2f9a014a9cad9a5948d6d45&type=3#OpenSans-Bold');
     letter-spacing: 5px;
     scale: 1 1;
 }
@@ -130,16 +122,12 @@
 }
 
 #SectionButton:checked {
-    background-color: rgb(25, 156, 194);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgb(90, 201, 255);
-    border-right-color: rgb(90, 201, 255);
-    border-top-color: rgb(90, 201, 255);
-    border-bottom-color: rgb(90, 201, 255);
     scale: 1 1;
+    background-color: rgb(25, 156, 194);
 }
 
 #SectionButton:checked .unity-radio-button__input {

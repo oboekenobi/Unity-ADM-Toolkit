@@ -295,7 +295,7 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
         section.assetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
         //AssetDatabase.CreateAsset(camManager.TimelineTemplate, section.assetPath);
 
-        bool copied = AssetDatabase.CopyAsset(("Assets/Resources/ADM Toolkit/Timeline Template.playable"), section.assetPath);
+        bool copied = AssetDatabase.CopyAsset(("Packages/com.adm.adm-toolkit/Runtime/Resources/ADM Toolkit/Timeline Template.playable"), section.assetPath);
 
         section.TimelineInstance = (TimelineAsset)AssetDatabase.LoadAssetAtPath(section.assetPath, typeof(TimelineAsset));
         section.director.playableAsset = section.TimelineInstance;

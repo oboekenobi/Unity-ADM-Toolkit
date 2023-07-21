@@ -831,27 +831,13 @@ namespace ADM.UISystem
 
         public void SetDefaultCinemachineCamera()
         {
-            PresentationSection previousSection = uI_Manager.PreviousPresentationSection;
-            TransitionSettings.m_FocusTarget = previousSection.VolumeSettings.m_FocusTarget;
-            TransitionCamera.transform.position = previousSection.VirtualCamera.transform.position;
-            TransitionCamera.transform.rotation = previousSection.VirtualCamera.transform.rotation;
-
-            /*if (projectManager.ActiveSection.SectionID != 0)
+            if(projectManager.Sections.Count > 1)
             {
-
-                PresentationSection previousSection = projectManager.Sections[projectManager.ActiveSection.SectionID - 1];
+                PresentationSection previousSection = uI_Manager.PreviousPresentationSection;
                 TransitionSettings.m_FocusTarget = previousSection.VolumeSettings.m_FocusTarget;
                 TransitionCamera.transform.position = previousSection.VirtualCamera.transform.position;
                 TransitionCamera.transform.rotation = previousSection.VirtualCamera.transform.rotation;
             }
-            else
-            {
-                //This should reset to the last actual section so declare a previous section instead of subtracting the SectionID to figure it out.
-                PresentationSection previousSection = projectManager.Sections[0];
-                TransitionSettings.m_FocusTarget = previousSection.VolumeSettings.m_FocusTarget;
-                TransitionCamera.transform.position = previousSection.VirtualCamera.transform.position;
-                TransitionCamera.transform.rotation = previousSection.VirtualCamera.transform.rotation;
-            }*/
         }
 
 

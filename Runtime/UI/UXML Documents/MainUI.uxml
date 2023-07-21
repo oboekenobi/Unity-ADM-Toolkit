@@ -1,3 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Packages/com.adm.adm-toolkit/Runtime/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=e7dccf8829cfc9349a5acba2c49d8453&amp;type=3#MainUI" />
-</ui:UXML>

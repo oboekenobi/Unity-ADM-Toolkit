@@ -26,6 +26,7 @@ public class MenuManager : VisualElement
     public VisualElement m_windowBackground;
     public VisualElement m_popoutLayout;
     public VisualElement m_popoutHandle;
+    public Label m_popupWarning;
     VisualElement m_laserPointerToolTip;
     VisualElement m_helpContactButton;
 
@@ -77,6 +78,7 @@ public class MenuManager : VisualElement
         m_helpWindowCloseButton = this.Q<VisualElement>("HelpWindowCloseButton");
         m_helpContactButton = this.Q<VisualElement>("ContactButton");
         m_laserPointerTexture = this.Q<VisualElement>("LaserPointerTexture");
+        m_popupWarning = this.Q<Label>("PopupWarning");
 
 
         
@@ -185,6 +187,25 @@ public class MenuManager : VisualElement
         tooltipContainer.ReleasePointer(ev.pointerId);
     }*/
 
+    public void DisplayPopupWarning(string message)
+    {
+        m_popupWarning.text = message;
+
+
+        m_popupWarning.style.transitionDuration = new List<TimeValue>()
+        {
+            new TimeValue(0, TimeUnit.Second)
+        };
+
+        m_popupWarning.style.opacity = 50;
+
+        m_popupWarning.style.transitionDuration = new List<TimeValue>()
+        {
+            new TimeValue(2, TimeUnit.Second)
+        };
+
+        m_popupWarning.style.opacity = 0;
+    }
     public void CaptureScreen()
     {
         string folderPath = "C:/screenshots/";
@@ -249,11 +270,19 @@ public class MenuManager : VisualElement
     {
         if (m_LabelToggle.value)
         {
-            ProjectManager.CallOutCanvas.alpha = 0;
+            if (Application.isPlaying)
+            {
+                ProjectManager.CallOutCanvas.alpha = 0;
+            }
+            DisplayPopupWarning("Callouts disabled");
         }
         else
         {
-            ProjectManager.CallOutCanvas.alpha = 1;
+            if (Application.isPlaying)
+            {
+                ProjectManager.CallOutCanvas.alpha = 1;
+            }
+            DisplayPopupWarning("Callouts enabled");
         }
     }
 
@@ -333,6 +362,7 @@ public class MenuManager : VisualElement
             m_PenTool.value = false;
             uI_Manager.drawManager.ErasedDrawing();
             UI_Manager.DrawingMode = false;
+            DisplayPopupWarning("Pen tool disabled");
         }
         if (!m_PanTool.value)
         {
@@ -362,6 +392,7 @@ public class MenuManager : VisualElement
             //m_laserPointerTexture.style.cursor.value.hotspot = Vector2.zero;
             //m_laserPointerTexture.style.cursor = new StyleCursor();
             hasBeenClicked = true;
+            DisplayPopupWarning("Pen tool enabled, Camera movements disabled.");
         }
         else if (m_PenTool.value)
         {
