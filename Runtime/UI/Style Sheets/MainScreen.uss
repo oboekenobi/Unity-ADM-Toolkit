@@ -1,0 +1,594 @@
+:root {
+    --color-1LayoutBackground: red;
+    --color-ContrastBackground: --color-Text rgb(255, 255, 255);
+}
+
+#ToolButtons .unity-toggle__input:hover {
+    transition-duration: 0.2s;
+    transition-delay: 0s;
+    border-left-color: rgb(25, 156, 194);
+    border-right-color: rgb(25, 156, 194);
+    border-top-color: rgb(25, 156, 194);
+    border-bottom-color: rgb(25, 156, 194);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    scale: 1 1;
+    transform-origin: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tool-button {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/Cursor_ThickOutline_Small.png?fileID=2800000&guid=ffbe3e4b185737e46836ecb4dceb3de0&type=3#Cursor_ThickOutline_Small');
+}
+
+#ToolButtons .unity-toggle__checkmark {
+    background-color: rgba(80, 84, 137, 0);
+    transition-duration: 0s;
+    transition-property: background-color;
+    opacity: 1;
+    background-image: none;
+    -unity-slice-left: 2;
+    -unity-slice-top: 2;
+    -unity-slice-right: 2;
+    -unity-slice-bottom: 2;
+    width: 100%;
+    height: 100%;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+#ToolButtons .unity-toggle__input:checked {
+    transition-duration: 0.2s;
+    transition-property: background-color;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    transition-timing-function: ease-out-elastic;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+}
+
+#PanToggle #unity-checkmark {
+    transition-duration: 0s;
+    transition-property: background-color;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/3D%20Icon.png?fileID=2800000&guid=9719606ae74f1dc4584b1c803f03d4fb&type=3#3D Icon');
+    -unity-font-definition: initial;
+}
+
+#LabelToggle #unity-checkmark {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+#PenToggle #unity-checkmark {
+    transition-duration: 0s;
+    transition-property: background-color;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/Pen_Icon_UI.png?fileID=2800000&guid=b04267e816d80744094787082502350a&type=3#Pen_Icon_UI');
+}
+
+#LabelToggle .unity-toggle__input:checked {
+    transition-duration: 0.2s;
+    transition-property: background-image;
+    transition-timing-function: ease-out-elastic;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/speaker_notes_off_FILL0_wght300_GRAD200_opsz48.png?fileID=2800000&guid=2aeadf6f6c1681443bf594af066d3bf7&type=3#speaker_notes_off_FILL0_wght300_GRAD200_opsz48');
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+#LabelToggle .unity-toggle__input:hover {
+    transition-duration: 0.2s;
+    transition-delay: 0s;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    scale: 1 1;
+    transform-origin: center;
+    width: 100%;
+    height: 100%;
+}
+
+#LabelToggle .unity-toggle__input {
+    transition-duration: 0.2s;
+    transition-property: background-image;
+    transition-timing-function: ease-out-elastic;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/sms_FILL0_wght400_GRAD0_opsz48.png?fileID=2800000&guid=b4a75a20b5e90fd4ead1a9f62e2021e1&type=3#sms_FILL0_wght400_GRAD0_opsz48');
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+#MenuToggle #unity-checkmark {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 0;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0.96);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    max-height: 100%;
+    min-height: 100%;
+    align-self: center;
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    min-width: 100%;
+    scale: 0.8 0.8;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/Forward.png?fileID=2800000&guid=334e8cbc6cddf694fa39a172d885968f&type=3#Forward');
+}
+
+#PlayTimeline .unity-toggle__input {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/play_arrow_FILL1_wght700_GRAD200_opsz48.png?fileID=2800000&guid=a3b060f3bbfd9ff4ca8ab13aa3df7f2b&type=3#play_arrow_FILL1_wght700_GRAD200_opsz48');
+    flex-grow: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+#PlayTimeline .unity-toggle__input:checked {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/pause_FILL1_wght100_GRAD200_opsz48.png?fileID=2800000&guid=bedda157ada7c2a4894c743f23f6b50e&type=3#pause_FILL1_wght100_GRAD200_opsz48');
+    flex-grow: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+#PlayTimeline #unity-checkmark {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.96);
+    flex-grow: 0;
+    width: 0;
+    height: 50px;
+}
+
+#FullScreenToggle .unity-toggle__input {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/fullscreen_FILL1_wght700_GRAD200_opsz48.png?fileID=2800000&guid=a66dc95e1ca594745a76b924e7c82ff5&type=3#fullscreen_FILL1_wght700_GRAD200_opsz48');
+    flex-grow: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+#FullScreenToggle .unity-toggle__input:checked {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/fullscreen_exit_FILL1_wght700_GRAD200_opsz48.png?fileID=2800000&guid=65c0db223265c7f44ad302ea76822c90&type=3#fullscreen_exit_FILL1_wght700_GRAD200_opsz48');
+    flex-grow: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+    max-height: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+#FullScreenToggle #unity-checkmark {
+    background-color: rgba(209, 72, 72, 0);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    flex-grow: 0;
+    width: 0;
+    height: 50px;
+}
+
+.unity-enum-field__input {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-enum-field__input:hover {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 1.5px;
+    border-right-width: 1.5px;
+    border-top-width: 1.5px;
+    border-bottom-width: 1.5px;
+    transition-property: all;
+    transition-duration: 0.1s;
+    transition-timing-function: ease;
+}
+
+.draggable--dragging {
+    border-left-color: rgb(255, 254, 254);
+    border-right-color: rgb(255, 254, 254);
+    border-top-color: rgb(255, 254, 254);
+    border-bottom-color: rgb(255, 254, 254);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+#MenuToggle:checked {
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+    background-color: rgb(25, 156, 194);
+}
+
+#MenuToggle:hover {
+    right: 0;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+    border-left-color: rgb(25, 156, 194);
+    border-right-color: rgb(25, 156, 194);
+    border-top-color: rgb(25, 156, 194);
+    border-bottom-color: rgb(25, 156, 194);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+}
+
+#MenuToggle .unity-toggle__input {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+#MenuToggle .unity-toggle__input:checked {
+    -unity-background-image-tint-color: rgb(10, 10, 10);
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+#MenuToggle:checked #unity-checkmark {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 0;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0.96);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    max-height: 100%;
+    min-height: 100%;
+    align-self: center;
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    min-width: 100%;
+    scale: 0.8 0.8;
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/Backwards.png?fileID=2800000&guid=d5cff8da6627e3d4d8a56a94789ed724&type=3#Backwards');
+}
+
+#ToolButtons .unity-toggle__input {
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out-sine;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    opacity: 1;
+}
+
+.MapButton:hover {
+    scale: 1 1;
+}
+
+.MapButton {
+    scale: 0.8 0.8;
+}
+
+.default_gameWindow {
+    border-left-color: rgb(142, 142, 142);
+    border-right-color: rgb(142, 142, 142);
+    border-top-color: rgb(142, 142, 142);
+    border-bottom-color: rgb(142, 142, 142);
+    border-left-width: 1.5px;
+    border-right-width: 1.5px;
+    border-top-width: 1.5px;
+    border-bottom-width: 1.5px;
+}
+
+.recording_gameWindow {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(255, 0, 0);
+    border-right-color: rgb(255, 0, 0);
+    border-top-color: rgb(255, 0, 0);
+    border-bottom-color: rgb(255, 0, 0);
+}
+
+.inactiveTimeline {
+    height: 0;
+    max-height: 0;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.activeTimeline {
+    height: 55px;
+    max-height: 55px;
+    min-height: 55px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.penCursor {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/Pen_Cursor.png?fileID=2800000&guid=09a8824407b4d754ebfab598325f3004&type=3#Pen_Cursor');
+}
+
+.unity-toggle__input {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=d24dbdc39fba4f640a57db5e3bd4750d&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+}
+
+.unity-button {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=d24dbdc39fba4f640a57db5e3bd4750d&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+}
+
+.default-cursor {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/Cursor_ThickOutline_Small.png?fileID=2800000&guid=ffbe3e4b185737e46836ecb4dceb3de0&type=3#Cursor_ThickOutline_Small');
+}
+
+.picking-cursor {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=d24dbdc39fba4f640a57db5e3bd4750d&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+}
+
+.dropdown-icon .unity-base-popup-field__arrow {
+    background-image: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/UXML%20Icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.png?fileID=2800000&guid=09c865fe10b69c344be4a803d9922851&type=3#arrow_drop_down_FILL0_wght400_GRAD0_opsz48');
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+}

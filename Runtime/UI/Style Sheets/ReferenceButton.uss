@@ -1,0 +1,162 @@
+#SectionButton .unity-radio-button__input:checked {
+    background-color: rgb(91, 91, 91);
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+    border-left-color: rgb(89, 89, 89);
+    border-right-color: rgb(89, 89, 89);
+    border-top-color: rgb(89, 89, 89);
+    border-bottom-color: rgb(89, 89, 89);
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.2s;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    scale: 1 1;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+#SectionButton .unity-radio-button__input {
+    background-color: rgb(196, 196, 196);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 100%;
+    height: 100%;
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#SectionButton:hover {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(25, 156, 194, 0.84);
+}
+
+#SectionButton .unity-radio-button__checkmark-background {
+    background-color: rgba(255, 255, 255, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 0;
+    height: 0;
+    max-width: 0;
+    min-width: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
+    position: relative;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+#SectionButton #unity-checkmark {
+    background-color: rgba(255, 255, 255, 0);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 0;
+    height: 100%;
+    max-width: 0;
+    min-width: 0;
+    max-height: 100%;
+    min-height: 24%;
+    flex-basis: 0;
+}
+
+#SectionButton .unity-radio-button__text {
+    -unity-text-align: middle-center;
+    right: auto;
+    left: 0;
+    bottom: 0;
+    text-overflow: ellipsis;
+    white-space: normal;
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=f77ea2bdcbee8d64a84cc026a14fe877&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+    color: rgb(0, 0, 0);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/Plugins/FFmpegUnityBind2-main/FFmpegUnityBind2-main/Assets/GigaVideoPlayer/DefaultTheme/Font/OpenSans-Regular.ttf?fileID=12800000&guid=88934f32c38090545a5f0a994f665fa9&type=3#OpenSans-Regular');
+}
+
+#SectionButton .unity-radio-button__input:checked .unity-radio-button__text {
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-font-style: normal;
+    -unity-text-outline-color: rgb(12, 74, 103);
+    text-shadow: 0 0 0 rgb(0, 0, 0);
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/Plugins/ADM%20Interactive%20Toolkit/Branding%20Resources/OpenSans-Bold.ttf?fileID=12800000&guid=ff6ac19fe2f9a014a9cad9a5948d6d45&type=3#OpenSans-Bold');
+    letter-spacing: 5px;
+    scale: 1 1;
+}
+
+#SectionButton {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgb(94, 94, 94);
+    transition-timing-function: ease-in-out-cubic;
+    transition-duration: 0.2s;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    scale: 0.9 0.9;
+}
+
+#SectionButton:checked {
+    background-color: rgb(25, 156, 194);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(90, 201, 255);
+    border-right-color: rgb(90, 201, 255);
+    border-top-color: rgb(90, 201, 255);
+    border-bottom-color: rgb(90, 201, 255);
+    scale: 1 1;
+}
+
+#SectionButton:checked .unity-radio-button__input {
+    transition-property: all;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 197, 255);
+    border-right-color: rgb(0, 197, 255);
+    border-top-color: rgb(0, 197, 255);
+    border-bottom-color: rgb(0, 197, 255);
+}
