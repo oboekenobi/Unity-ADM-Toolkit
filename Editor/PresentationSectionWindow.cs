@@ -1,11 +1,10 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using UnityEditor.SceneManagement;
 using ADM.UISystem;
 
 
@@ -98,3 +97,4 @@ public class PresentationSectionWindow : EditorWindow
     }
 
 }
+#endif

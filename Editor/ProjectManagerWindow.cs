@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -79,3 +80,4 @@ public class ProjectManagerWindow : EditorWindow
         if (embeddedInspector != null) DestroyImmediate(embeddedInspector);
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.SceneManagement;
@@ -63,4 +64,7 @@ public class PresentationSectionSceneGUI : Editor
             }
         }
     }
-}
+}
+
+
+#endif

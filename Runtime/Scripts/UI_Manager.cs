@@ -107,6 +107,7 @@ namespace ADM.UISystem
         public VisualElement m_controlPanelTitleLayout;
         public Slider m_penStrokeSlider;
         public VisualElement m_laserPointerToolTip;
+        public VisualElement m_penLayout;
         public VisualElement m_markerLayout;
         public VisualElement m_currentControlPanel;
         public VisualElement TitleBackground;
@@ -186,6 +187,7 @@ namespace ADM.UISystem
             m_controlPanelTitle = root.Q<Label>("ControlPanelTitle");
             m_markerLayout = root.Q<VisualElement>("MarkerLayout");
             m_defaultSettingsButton = root.Q<VisualElement>("DefaultSettingsButton");
+            m_penLayout = root.Q<VisualElement>("LaserPointerTexture");
 
             m_versionLabel = root.Q<Label>("VersionLabel");
             m_versionNotes = root.Q<Label>("VersionNotes");

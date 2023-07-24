@@ -1,10 +1,11 @@
 //Author : https://github.com/seekeroftheball   https://gist.github.com/seekeroftheball
 //Version : 1.2
 //Updated : March 2023
-
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace NewFolderWizard
 {
@@ -13,13 +14,14 @@ namespace NewFolderWizard
     /// </summary>
     public class NewFolderWizardSetupWindow : EditorWindow
     {
+
         /// <summary>
         /// Properties defining the scale of the editor window.
         /// </summary>
         private struct WindowBounds
         {
-            public const float WindowWidth = 300;
-            public const float WindowHeight = 350;
+            public const float WindowWidth = 500;
+            public const float WindowHeight = 190;
 
             public static Vector2 WindowSize = new(WindowWidth, WindowHeight);
 
@@ -65,40 +67,61 @@ namespace NewFolderWizard
         {
             GUILayout.Space(4);
 
-            GUILayout.Label("Enter exhibit code");
+            GUIStyle TitleStyle = new GUIStyle(GUI.skin.label);
+            TitleStyle.fontStyle = FontStyle.Bold;
+            TitleStyle.alignment = TextAnchor.MiddleCenter;
+            TitleStyle.fontSize = 16;
 
-            GUILayout.Space(4);
+            GUILayout.Label("Please enter the project code before proceeding!", TitleStyle);
+
+            GUILayout.Space(20);
 
             NewFoldersSetupWizard.ExhibitCode = EditorGUILayout.TextField("Exhibit Code:", NewFoldersSetupWizard.ExhibitCode);
 
             Debug.Log((NewFoldersSetupWizard.ExhibitCode));
 
-            GUILayout.Space(10);
+            GUILayout.Space(20);
 
-            GUILayout.Label("Included Folders");
+            GUIStyle DescStyle = new GUIStyle(GUI.skin.label);
+            DescStyle.fontStyle = FontStyle.Normal;
+            DescStyle.alignment = TextAnchor.MiddleLeft;
+            DescStyle.fixedWidth = WindowBounds.WindowWidth;
+            DescStyle.clipping = TextClipping.Clip;
+            DescStyle.wordWrap= true;
+            DescStyle.fontSize = 12;
+            // Scroll
+
+
+            // Draw folder list
+            //NewFoldersSetupWizard.ParseRootDirectory();
+
+            
+            GUILayout.Label("(Example: GOL-001) This will create the necessary project folders under your Assets folder. It will be labeled  ''your project code" + " + " + "_Assets''. You will place all your project files for that case into that folder hierarchy.", DescStyle);
+            GUILayout.Space(20);
+            /*GUILayout.Label("Included Folders");
 
             GUILayout.Space(10);
 
             // Select all
-            /*bool selectAllCache = SelectAll;
+            *//*bool selectAllCache = SelectAll;
             SelectAll = GUILayout.Toggle(SelectAll, "Select All");
             if (!selectAllCache.Equals(SelectAll))
                 NewFoldersSetupWizard.SelectAllChanged(SelectAll);
 */
             // Horizontal Line
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            // Scroll
+           /* // Scroll
             WindowBounds.ScrollPosition = GUILayout.BeginScrollView(WindowBounds.ScrollPosition, true, true, GUILayout.Width(WindowBounds.WindowWidth), GUILayout.Height(WindowBounds.ScrollViewHeight));
 
             // Draw folder list
-            NewFoldersSetupWizard.ParseRootDirectory();
-            
+            //NewFoldersSetupWizard.ParseRootDirectory();
+
             GUILayout.Space(2);
             GUILayout.EndScrollView();
-            GUILayout.Space(2);
+            GUILayout.Space(2);*/
 
-  
+
             // Create Folders button
             if (GUILayout.Button("Set Project"))
             {
@@ -106,6 +129,8 @@ namespace NewFolderWizard
                 CreateFolderHierarchy.CreateFolders(manager);
                 Close();
             }
+
+            GUILayout.Space(4);
         }
 
         /// <summary>
@@ -119,5 +144,7 @@ namespace NewFolderWizard
             popupModal.ShowModalUtility();
             popupModal.Focus();
         }
+
     }    
 }
+#endif

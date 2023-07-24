@@ -16,6 +16,8 @@ using System.ComponentModel;
 [ExecuteInEditMode]
 public class PresentationSection : MonoBehaviour
 {
+    public Transform TestLinePoint;
+
     [HideInInspector]
     public ProjectManager manager;
     public UI_Manager uI_Manager;

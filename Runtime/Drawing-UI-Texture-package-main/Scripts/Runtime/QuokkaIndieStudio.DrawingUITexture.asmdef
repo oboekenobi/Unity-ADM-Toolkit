@@ -1,7 +1,9 @@
 {
     "name": "QuokkaIndieStudio.DrawingUITexture",
     "rootNamespace": " LS.DrawTexture",
-    "references": [],
+    "references": [
+        "GUID:242cb82ff362fa44d8eaf3884dba84f3"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

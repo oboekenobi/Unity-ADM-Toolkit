@@ -1,15 +1,16 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using UnityEditor.SceneManagement;
 using ADM.UISystem;
 
 [CustomEditor(typeof(PresentationSection))]
 public class PresentationSectionEditor : Editor
 {
+
     public static VisualElement root { get; set; }
 
     [SerializeField]
@@ -88,4 +89,8 @@ public class PresentationSectionEditor : Editor
     }
 
     #endregion
-}
+
+}
+
+
+#endif

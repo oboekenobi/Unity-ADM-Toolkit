@@ -1,11 +1,11 @@
+using ADM.UISystem;
 using LS.DrawTexture.Utils;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace LS.DrawTexture.Runtime
 {
-
-    [RequireComponent(typeof(RawImage))]
     public class DrawTextureUI : MonoBehaviour
     {
 
@@ -33,7 +33,7 @@ namespace LS.DrawTexture.Runtime
             res4096x4096,
         }
 
-
+        public UI_Manager uI_Manager;
         #endregion
 
 
@@ -61,12 +61,14 @@ namespace LS.DrawTexture.Runtime
         private ResolutionTexture resolution = ResolutionTexture.res512x512;
 
         [SerializeField]
-        private Texture2D brushTexture = null;
+        public Texture2D brushTexture = null;
         [SerializeField]
-        private int idTexture = 0;
+        public int idTexture = 0;
 
         private Vector2Int res;
-        private Texture mainTexture = null;
+        [SerializeField]
+        private RenderTexture mainTexture = null;
+        [SerializeField]
         private RenderTexture drawTexture = null;
         private RenderTexture tempTexture = null;
         private RectTransform rectTransform;
@@ -151,27 +153,31 @@ namespace LS.DrawTexture.Runtime
 
         private void Start()
         {
-            rawImage = GetComponent<RawImage>();
+            uI_Manager = GameObject.FindFirstObjectByType<UI_Manager>();
+
+            //rawImage = GetComponent<RawImage>();
             rectTransform = transform.GetComponent<RectTransform>();
 
             divRect = Vector2.one / rectTransform.rect.size;
 
             material = new Material(Resources.Load<Shader>("Shaders/Draw_Texture"));
 
-            ChangeResolution();
+            Vector2Int screenSize = new Vector2Int((int)Screen.width, (int)Screen.height);
+
+            res = screenSize;
+
+            //ChangeResolution();
 
 
             //Create a new texture if the current texture is null
-            if (!rawImage.texture)
-            {
-                mainTexture = TextureUtils.CreateTexture(res.x, res.y, rawImage.color);
-                rawImage.texture = mainTexture;
-            }
-            else
+
+            mainTexture = TextureUtils.CreateTexture(res.x, res.y, Color.clear);
+
+            /*else
             {
                 mainTexture = rawImage.texture;
             }
-
+*/
             InitTexture(mainTexture);
             SetShader();
         }
@@ -191,6 +197,10 @@ namespace LS.DrawTexture.Runtime
                     BlitTexture();
                 }
                 lastMousePos = Input.mousePosition;
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                Clear();
             }
         }
 
@@ -287,9 +297,9 @@ namespace LS.DrawTexture.Runtime
         private void InitTexture(Texture _texture)
         {
             drawTexture = TextureUtils.CreateTexture(_texture, res.x, res.y);
-            tempTexture = TextureUtils.CreateTexture(res.x, res.y, Color.white);
+            tempTexture = TextureUtils.CreateTexture(res.x, res.y, Color.clear);
 
-            rawImage.texture = drawTexture;
+            uI_Manager.m_penLayout.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(drawTexture));
         }
         #endregion
         /// <summary>
@@ -372,6 +382,7 @@ namespace LS.DrawTexture.Runtime
         /// </summary>
         public void Clear()
         {
+            Debug.Log("Drawing Cleared");
             Graphics.Blit(mainTexture, drawTexture);
         }
         #endregion

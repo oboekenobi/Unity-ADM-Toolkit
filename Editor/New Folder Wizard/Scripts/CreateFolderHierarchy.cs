@@ -1,7 +1,7 @@
 //Author : https://github.com/seekeroftheball   https://gist.github.com/seekeroftheball
 //Version : 1.2
 //Updated : March 2023
-
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -70,3 +70,4 @@ namespace NewFolderWizard
         }
     }
 }
+#endif

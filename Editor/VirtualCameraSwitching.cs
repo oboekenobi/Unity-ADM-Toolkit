@@ -1,16 +1,14 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Overlays;
 using UnityEngine.UIElements;
 using UnityEditor;
-using Unity.UI;
-using UnityEditor.EditorTools;
 using UnityEditor.Toolbars;
 using Cinemachine;
 using UnityEngine.Timeline;
 using ADM.UISystem;
-using UnityEngine.Playables;
 
 [Overlay(typeof(SceneView), "ADM 3D Toolkit", true)]
 
@@ -471,3 +469,4 @@ class DropdownExample : EditorToolbarDropdownToggle
 }
 #endregion
 
+#endif

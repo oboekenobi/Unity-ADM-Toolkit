@@ -1,12 +1,11 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomPropertyDrawer(typeof(MenuBinding))]
 public class ControlPanelEditor : PropertyDrawer
 {
-
     /*private VisualElement root { get; set; }
 
     public VisualTreeAsset m_UXML;
@@ -92,51 +91,54 @@ public class ControlPanelEditor : PropertyDrawer
         root = new VisualElement();
     }
 
+}
 
-}/*[CustomPropertyDrawer(typeof(MenuBinding))]
+
+#endif
+/*[CustomPropertyDrawer(typeof(MenuBinding))]
 public class MenuBindingEditor : PropertyDrawer
 {
 
-    private VisualElement root { get; set; }
+private VisualElement root { get; set; }
 
-    public VisualTreeAsset m_UXML;
+public VisualTreeAsset m_UXML;
 
-    public static SerializedProperty controlPanelSerializedProperty;
-
-
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-        InitializeEditor();
-
-        var title = new PropertyField(property.FindPropertyRelative("ControlTitle"));
-
-        var type = new PropertyField(property.FindPropertyRelative("selectedType"));
-
-        var boolean = new PropertyField(property.FindPropertyRelative("InitialBooleanValue"));
-
-        var gameObject = new PropertyField(property.FindPropertyRelative("GameObjectReference"));
-
-        var section = new PropertyField(property.FindPropertyRelative("SectionReference"));
+public static SerializedProperty controlPanelSerializedProperty;
 
 
-        root.Add(type);
-        root.Add(title);
-        root.Add(gameObject);
-        root.Add(boolean);
-        root.Add(section);
+public override VisualElement CreatePropertyGUI(SerializedProperty property)
+{
+InitializeEditor();
 
-        //m_UXML.CloneTree(root);
+var title = new PropertyField(property.FindPropertyRelative("ControlTitle"));
 
-        // Add custom inspector elements for ControlPanel here
+var type = new PropertyField(property.FindPropertyRelative("selectedType"));
 
-        //controlPanelSerializedProperty = property;
-        return root;
-    }
+var boolean = new PropertyField(property.FindPropertyRelative("InitialBooleanValue"));
 
-    private void InitializeEditor()
-    {
-        root = new VisualElement();
-    }
+var gameObject = new PropertyField(property.FindPropertyRelative("GameObjectReference"));
+
+var section = new PropertyField(property.FindPropertyRelative("SectionReference"));
 
 
-}*/
+root.Add(type);
+root.Add(title);
+root.Add(gameObject);
+root.Add(boolean);
+root.Add(section);
+
+//m_UXML.CloneTree(root);
+
+// Add custom inspector elements for ControlPanel here
+
+//controlPanelSerializedProperty = property;
+return root;
+}
+
+private void InitializeEditor()
+{
+root = new VisualElement();
+}
+
+
+}*/

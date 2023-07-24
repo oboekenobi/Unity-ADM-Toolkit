@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace SerializableDictionary
 {
     [CustomPropertyDrawer(typeof(SerializableDictionaryBase), true)]
@@ -608,3 +609,4 @@ namespace SerializableDictionary
 		}
 	}
 }
+#endif

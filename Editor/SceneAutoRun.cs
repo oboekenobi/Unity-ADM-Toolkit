@@ -1,11 +1,7 @@
-using NewFolderWizard;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEngine;
 
-[InitializeOnLoad]
+#if UNITY_EDITOR
+using UnityEditor;
+
 public class SceneAutoRun
 {
     /*bool Initialized = false;
@@ -18,3 +14,4 @@ public class SceneAutoRun
 
     }*/
 }
+#endif

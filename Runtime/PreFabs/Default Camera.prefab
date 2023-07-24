@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5524108836991556152}
   - component: {fileID: 5524108836991556153}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Default Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Layer: 0
   m_Name: Empty Camera
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 7f107d3e68f5dd84b9bc140c2a9ae02e, type: 3}
+  m_Icon: {fileID: 2800000, guid: 22f1fd4dd7b2e1e4781eafcd88f5f3a9, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -252,14 +252,17 @@ MonoBehaviour:
   VirtualCamera: {fileID: 5524108837134382373}
   VolumeSettings: {fileID: 5524108837134382395}
   LabelEditorValue: 0
+  ZoomSpeedOffset: 0
   PopupWindowContent: {fileID: 0}
   CustomMenu: {fileID: 0}
-  ControlPanelTitle: 
-  menuBindings: []
   ToolsQuery: 
   ToggleObjects: []
   Markers: {fileID: 0}
   SectionMarkers: []
+  OverrideType: 0
+  ControlPanelOverride:
+    ControlPanelTitle: 
+    menuBindings: []
   SectionTitle: Empty Camera
   referenceTitle: 
   CallOutTransitionDuration: 0.5

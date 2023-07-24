@@ -12,10 +12,6 @@ using UnityEditor;
 #endif
 public class ProjectManager : MonoBehaviour
 {
-    void ClearSectionSlideData()
-    {
-
-    }
 
     #region Editor Variable Checkers
     void SlideNullChecker()
@@ -149,7 +145,6 @@ public class ProjectManager : MonoBehaviour
             if(MasterControlPanel != null)
             {
                 MasterControlPanel.GeneratedContainer = uI_Manager.GenerateControlPanel(MasterControlPanel);
-                uI_Manager.CurrentControlPanel = MasterControlPanel;
             }
 
         }

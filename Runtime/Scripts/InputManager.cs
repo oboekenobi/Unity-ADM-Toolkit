@@ -831,7 +831,7 @@ namespace ADM.UISystem
 
         public void SetDefaultCinemachineCamera()
         {
-            if(projectManager.Sections.Count > 1)
+            if(uI_Manager.PreviousPresentationSection != null)
             {
                 PresentationSection previousSection = uI_Manager.PreviousPresentationSection;
                 TransitionSettings.m_FocusTarget = previousSection.VolumeSettings.m_FocusTarget;
