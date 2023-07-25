@@ -20,16 +20,16 @@ public class PresentationSectionEditor : Editor
 
     private void OnEnable()
     {
-        sceneGUI = new PresentationSectionSceneGUI();
-        sceneGUI.SetTarget((PresentationSection)target);
+        /*sceneGUI = new PresentationSectionSceneGUI();
+        sceneGUI.SetTarget((PresentationSection)target);*/
     }
 
     private void OnDisable()
     {
-        if (sceneGUI != null)
+        /*if (sceneGUI != null)
         {
             DestroyImmediate(sceneGUI);
-        }
+        }*/
     }
 
     public override VisualElement CreateInspectorGUI()

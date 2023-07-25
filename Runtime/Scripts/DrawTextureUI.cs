@@ -213,7 +213,6 @@ public class DrawTextureUI : MonoBehaviour
 
             Graphics.Blit(drawTexture, tempTexture, material, (int)type);
             Graphics.Blit(tempTexture, drawTexture);
-            Debug.Log("Captureing Pixels");
         }
     }
 
@@ -390,7 +389,6 @@ public class DrawTextureUI : MonoBehaviour
     public void Clear()
     {
         pointerCaptured = false;
-        Debug.Log("Drawing Cleared");
         Graphics.Blit(mainTexture, drawTexture);
         InitCanvas();
     }
