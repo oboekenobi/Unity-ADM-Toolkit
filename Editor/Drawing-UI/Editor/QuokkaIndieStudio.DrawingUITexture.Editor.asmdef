@@ -2,7 +2,8 @@
     "name": "QuokkaIndieStudio.DrawingUITexture.Editor",
     "rootNamespace": " LS.DrawTexture",
     "references": [
-        "QuokkaIndieStudio.DrawingUITexture"
+        "QuokkaIndieStudio.DrawingUITexture",
+        "ADMToolkitRuntime"
     ],
     "includePlatforms": [
         "Editor"

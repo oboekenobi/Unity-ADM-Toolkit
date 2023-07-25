@@ -10,6 +10,7 @@ using System;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using LS.DrawTexture.Utils;
 
 namespace ADM.UISystem
 {
@@ -22,7 +23,7 @@ namespace ADM.UISystem
         public ProjectManager projectManager;
         public PresentationSection PreviousPresentationSection;
         //public CameraCapture cameraCapture;
-        public DrawWithMouse drawManager;
+        public DrawTextureUI drawManager;
 
         //This changes and sets the control panel whenever the CurrentControlPanel value is set
         private ControlPanel _currentControlPanel;
@@ -708,7 +709,7 @@ namespace ADM.UISystem
 
         public void ChangePenStroke(float value)
         {
-            drawManager.lineWidth = value;
+            drawManager.Size = value;
 
 
             if (Application.isPlaying)

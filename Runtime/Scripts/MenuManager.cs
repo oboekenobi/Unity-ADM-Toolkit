@@ -187,7 +187,7 @@ public class MenuManager : VisualElement
         tooltipContainer.ReleasePointer(ev.pointerId);
     }*/
 
-    public void DisplayPopupWarning(string message)
+    public void DisplayPopupWarning(string message, float delay)
     {
         m_popupWarning.text = message;
 
@@ -196,12 +196,23 @@ public class MenuManager : VisualElement
         {
             new TimeValue(0, TimeUnit.Second)
         };
+        m_popupWarning.style.transitionDelay = new List<TimeValue>()
+        {
+            new TimeValue(0, TimeUnit.Second)
+        };
 
-        m_popupWarning.style.opacity = 50;
 
+
+        m_popupWarning.style.opacity = 0.7f;
+
+        
+        m_popupWarning.style.transitionDelay = new List<TimeValue>()
+        {
+            new TimeValue(delay, TimeUnit.Second)
+        };
         m_popupWarning.style.transitionDuration = new List<TimeValue>()
         {
-            new TimeValue(2, TimeUnit.Second)
+            new TimeValue(3.5f, TimeUnit.Second)
         };
 
         m_popupWarning.style.opacity = 0;
@@ -274,7 +285,7 @@ public class MenuManager : VisualElement
             {
                 ProjectManager.CallOutCanvas.alpha = 0;
             }
-            DisplayPopupWarning("Callouts disabled");
+            DisplayPopupWarning("Callouts disabled", 2);
         }
         else
         {
@@ -282,7 +293,7 @@ public class MenuManager : VisualElement
             {
                 ProjectManager.CallOutCanvas.alpha = 1;
             }
-            DisplayPopupWarning("Callouts enabled");
+            DisplayPopupWarning("Callouts enabled", 2);
         }
     }
 
@@ -360,9 +371,9 @@ public class MenuManager : VisualElement
             m_laserPointerTexture.pickingMode = PickingMode.Ignore;
 
             m_PenTool.value = false;
-            uI_Manager.drawManager.ErasedDrawing();
+            uI_Manager.drawManager.Clear();
             UI_Manager.DrawingMode = false;
-            DisplayPopupWarning("Pen tool disabled");
+            DisplayPopupWarning("Pen tool disabled", 3);
         }
         if (!m_PanTool.value)
         {
@@ -381,7 +392,7 @@ public class MenuManager : VisualElement
         UI_Manager.RestrictMovement = true;
         if (hasBeenClicked)
         {
-            uI_Manager.drawManager.ErasedDrawing();
+            uI_Manager.drawManager.Clear();
             hasBeenClicked = false;
         }
         if (m_PanTool.value)
@@ -389,10 +400,8 @@ public class MenuManager : VisualElement
             m_PanTool.value = false;
             UI_Manager.DrawingMode = true;
             m_laserPointerTexture.pickingMode = PickingMode.Position;
-            //m_laserPointerTexture.style.cursor.value.hotspot = Vector2.zero;
-            //m_laserPointerTexture.style.cursor = new StyleCursor();
             hasBeenClicked = true;
-            DisplayPopupWarning("Pen tool enabled, Camera movements disabled.");
+            DisplayPopupWarning("Pen tool enabled, Camera movements disabled.", 4);
         }
         else if (m_PenTool.value)
         {
@@ -404,7 +413,7 @@ public class MenuManager : VisualElement
         {
             m_laserPointerTexture.pickingMode = PickingMode.Ignore;
             UI_Manager.DrawingMode = false;
-            uI_Manager.drawManager.ErasedDrawing();
+            uI_Manager.drawManager.Clear();
         }
     }
 
