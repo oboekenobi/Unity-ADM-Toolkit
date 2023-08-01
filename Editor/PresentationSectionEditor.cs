@@ -16,12 +16,22 @@ public class PresentationSectionEditor : Editor
     [SerializeField]
     public VisualTreeAsset m_UXML;
 
-    private PresentationSectionSceneGUI sceneGUI;
+    //private PresentationSectionSceneGUI sceneGUI;
+
+    private PresentationSection targetSection;
+    private ProjectManager manager;
+
+    public void SetTarget(PresentationSection section)
+    {
+        targetSection = section;
+    }
 
     private void OnEnable()
     {
-        /*sceneGUI = new PresentationSectionSceneGUI();
-        sceneGUI.SetTarget((PresentationSection)target);*/
+        //sceneGUI = new PresentationSectionSceneGUI();
+        SceneView.duringSceneGui += OnSceneGUI;
+        //sceneGUI.SetTarget((PresentationSection)target);
+        SetTarget((PresentationSection)target);
     }
 
     private void OnDisable()
@@ -30,13 +40,59 @@ public class PresentationSectionEditor : Editor
         {
             DestroyImmediate(sceneGUI);
         }*/
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
+    void OnSceneGUI(SceneView sceneView)
+    {
+        if (!Application.isPlaying)
+        {
+            PresentationSection camera = targetSection;
+            if (camera == null)
+            {
+                return;
+            }
+
+            if (manager == null)
+            {
+                manager = GameObject.FindFirstObjectByType<ProjectManager>();
+            }
+
+            if (manager.SceneCameras != null)
+            {
+                manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
+                manager.CanSwitchEditorCamera = true;
+                manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
+            }
+            if (manager.ActiveSection != manager.LastActiveSection)
+            {
+                manager.inputManager.SetDefaultCinemachineCamera();
+
+                //manager.ActiveSection.director.time = manager.ActiveSection.director.duration;
+                manager.ActiveSection.director.time = 0;
+                manager.ActiveSection.director.RebuildGraph();
+                manager.ActiveSection.director.Play();
+                manager.ActiveSection.director.playableGraph.GetRootPlayable(0);
+
+                //lock the Timeline and release it if the current selected camera is different
+                TimelineState.SetLockStatus(false);
+                TimelineState.SetLockStatus(true);
+            }
+            else
+            {
+
+            }
+        }
     }
 
     public override VisualElement CreateInspectorGUI()
     {
         InitializeEditor();
 
-        m_UXML.CloneTree(root);
+        if (!Application.isPlaying)
+        {
+            m_UXML.CloneTree(root);
+        }
 
         //creates foldout menu of the entire default way the script is displayed in the inspector, minus the already composed propertyfield
         var foldout = new Foldout() { viewDataKey = "PresentationSectionEditor" };
@@ -53,13 +109,13 @@ public class PresentationSectionEditor : Editor
 
     #region GizmoLabel
 
-    public static ProjectManager manager;
+    public static ProjectManager StaticManager;
     public static GUIStyle centeredTextStyle = new GUIStyle();
     public PresentationSection lastSection;
     public bool RegisterLock;
     private static void GrabManager()
     {
-        manager = GameObject.FindFirstObjectByType<ProjectManager>();
+        StaticManager = GameObject.FindFirstObjectByType<ProjectManager>();
         centeredTextStyle.alignment = TextAnchor.MiddleCenter;
         centeredTextStyle.normal.textColor = Color.white;
     }
@@ -67,30 +123,33 @@ public class PresentationSectionEditor : Editor
     [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
     static void RenderCustomGizmo(Transform objectTransform, GizmoType gizmoType)
     {
-        if (manager == null)
+        if (StaticManager == null)
         {
             GrabManager();
         }
         else
         {
-            for (int i = 0; i < manager.SceneCameras.Count; i++)
+            for (int i = 0; i < StaticManager.SceneCameras.Count; i++)
             {
                 //Handles.color = Color.blue;
-                if (manager.SceneCameras[i].VirtualCamera != null)
+                if (StaticManager.SceneCameras[i].VirtualCamera != null)
                 {
-                    Handles.Label(manager.SceneCameras[i].CameraChild.transform.position + Vector3.up * 0.5f,
-                    manager.SceneCameras[i].CameraChild.name, centeredTextStyle);
+                    Handles.Label(StaticManager.SceneCameras[i].CameraChild.transform.position + Vector3.up * 0.5f,
+                    StaticManager.SceneCameras[i].CameraChild.name, centeredTextStyle);
                 }
             }
         }
-        //ProjectManager manager = GameObject.FindObjectOfType<ProjectManager>();
-
-        //Draw here
     }
 
     #endregion
 
+
+
 }
+
+
+
+
 
 
 #endif

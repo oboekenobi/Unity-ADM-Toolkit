@@ -32,7 +32,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -56,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 387174675368257094}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58bf958ce20785440b0449396397bfcc, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e0e5a2fcbbb6444cae3c6241944d251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -84,38 +83,30 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         previousControlOffset: {x: 0, y: 0, z: 0}
         nextControlOffset: {x: 0, y: 0, z: 0}
-        width: 2
+        width: 0
       n1:
-        position: {x: 1, y: 0, z: 0}
+        position: {x: 0, y: 0, z: 0}
         previousControlOffset: {x: 0, y: 0, z: 0}
         nextControlOffset: {x: 0, y: 0, z: 0}
-        width: 2
-    points:
-    - position: {x: 1.2141241, y: 0.015678223, z: -0.74312854}
-      previousControlOffset: {x: 0, y: 0, z: 0}
-      nextControlOffset: {x: 0, y: 0, z: 0}
-      width: 2
-    - position: {x: -0.6139089, y: 0, z: 0.39910513}
-      previousControlOffset: {x: 0, y: 0, z: 0}
-      nextControlOffset: {x: 0, y: 0, z: 0}
-      width: 2
+        width: 0
+    points: []
     owner: {fileID: 387174675368257092}
     option:
       startRatio: 0
-      endRatio: 1
+      endRatio: 0
       mode: 0
-      divideLength: 100
-      divideAngle: 180
+      divideLength: 0
+      divideAngle: 0
       color:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
         key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
-        key3: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
-        key4: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
-        key5: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
-        key6: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
-        key7: {r: 0.49019608, g: 0.8862745, b: 0.5254902, a: 0.21960784}
+        key2: {r: 0, g: 0, b: 0, a: 0}
+        key3: {r: 0, g: 0, b: 0, a: 0}
+        key4: {r: 0, g: 0, b: 0, a: 0}
+        key5: {r: 0, g: 0, b: 0, a: 0}
+        key6: {r: 0, g: 0, b: 0, a: 0}
+        key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
         ctime1: 65535
         ctime2: 0
@@ -124,7 +115,7 @@ MonoBehaviour:
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 193
+        atime0: 0
         atime1: 65535
         atime2: 0
         atime3: 0
@@ -133,7 +124,7 @@ MonoBehaviour:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_ColorSpace: 0
+        m_ColorSpace: -1
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       jointOption: 0

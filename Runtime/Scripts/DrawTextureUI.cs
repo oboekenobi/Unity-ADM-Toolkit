@@ -162,14 +162,6 @@ public class DrawTextureUI : MonoBehaviour
         //res = screenSize;
 
         ChangeResolution();
-
-
-        //Create a new texture if the current texture is null
-
-        mainTexture = TextureUtils.CreateTexture(res.x, res.y, Color.clear);
-
-        InitTexture(mainTexture);
-        SetShader();
     }
 
     private bool pointerCaptured;
@@ -311,7 +303,7 @@ public class DrawTextureUI : MonoBehaviour
     /// <summary>
     /// Set property shader for the brush size.
     /// </summary>
-    private void ChangeSize()
+    public void ChangeSize()
     {
         if (material)
         {
@@ -390,7 +382,7 @@ public class DrawTextureUI : MonoBehaviour
     {
         pointerCaptured = false;
         Graphics.Blit(mainTexture, drawTexture);
-        InitCanvas();
+        uI_Manager.m_penLayout.style.backgroundImage = null;
     }
 
     public void InitCanvas()
@@ -402,7 +394,7 @@ public class DrawTextureUI : MonoBehaviour
         mainTexture = TextureUtils.CreateTexture(res.x, res.y, Color.clear);
 
         InitTexture(mainTexture);
-
+        SetShader();
     }
     #endregion
 

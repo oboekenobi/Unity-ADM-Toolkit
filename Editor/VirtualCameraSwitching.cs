@@ -9,6 +9,10 @@ using UnityEditor.Toolbars;
 using Cinemachine;
 using UnityEngine.Timeline;
 using ADM.UISystem;
+using Codice.CM.Common.Serialization.Replication;
+using System.Xml.Linq;
+using static System.Collections.Specialized.BitVector32;
+using UnityEditor.SceneManagement;
 
 [Overlay(typeof(SceneView), "ADM 3D Toolkit", true)]
 
@@ -83,9 +87,9 @@ class CameraLabel : EditorToolbarButton//, IAccessContainerWindow
     }
     // This method will be invoked when the `Create Cube` button is clicked.
 
-    void OnClick()
+    /*void OnClick()
     {
-        ProjectManager manager = GameObject.FindWithTag("SceneManager").GetComponent<ProjectManager>();
+        ProjectManager manager = GameObject.FindFirstObjectByType<ProjectManager>();
 
         if(manager == null)
         {
@@ -119,6 +123,47 @@ class CameraLabel : EditorToolbarButton//, IAccessContainerWindow
 
         //if (containerWindow is SceneView view)
         //    view.FrameSelected();
+
+    }*/
+
+    void OnClick()
+    {
+        /*ProjectManager manager = GameObject.FindFirstObjectByType<ProjectManager>();
+        ADMToolkitManager toolkitManager = GameObject.FindFirstObjectByType<ADMToolkitManager>();
+
+
+
+        if (manager == null)
+        {
+            Debug.LogWarning("You cannot place a Label if you don't have a Project Manager");
+            return;
+        }
+
+        if (VirtualCameraSwitching.NullProject(manager))
+        {
+            return;
+        }
+
+        VisualElement root = manager.ActiveSection.CalloutCanvasDocument.rootVisualElement;
+        VisualTreeAsset calloutAsset = ((VisualTreeAsset)AssetDatabase.LoadAssetAtPath(("Packages/com.adm.adm-toolkit/Runtime/UI/UXML Documents/CalloutTemplate.uxml"), typeof(VisualTreeAsset)));
+        VisualElement callout = calloutAsset.CloneTree();
+
+        //calloutAsset.
+
+        CalloutManager calloutManager = callout.Q<CalloutManager>("Callout");
+
+        GameObject labelPoint = Resources.Load<GameObject>("PreFabs/Label Point");
+
+        calloutManager.labelPoint = GameObject.Instantiate(labelPoint, Vector3.zero, Quaternion.identity);
+
+        root.Add(callout);
+
+
+        Undo.RegisterCreatedObjectUndo(labelPoint, "Create Label");
+*/
+
+        GameObject newObj = PrefabUtility.InstantiatePrefab(Resources.Load<Object>("PreFabs/Label Point")) as GameObject;
+
 
     }
 
@@ -251,7 +296,7 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
         newObj.name = "Empty Camera";
         Vobj.manager = manager;
         Vobj.section.manager = manager;
-        Vobj.section.Camera = Vobj;
+        Vobj.section.sectionCamera = Vobj;
         Vobj.section.SectionTitle = "Empty Section";
         Vobj.enabled = true;
         manager.Sections.Add(Vobj.section);
@@ -259,7 +304,7 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
         Vobj.section.Pivot = Vobj.PivotAngle;
         Vobj.section.enabled = true;
 
-
+        InitializeCalloutCanvas(Vobj.section, manager);
         InitializeTimeline(Vobj.section, manager);
 
         Vector3 pivotPostion = RaycastHitPosition();
@@ -284,18 +329,28 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
         Undo.RegisterCreatedObjectUndo(newObj.gameObject, "Create Camera");
     }
 
-
+    public void InitializeCalloutCanvas(PresentationSection section, ProjectManager manager)
+    {
+        string filePath = (manager.currentProject + "/Callout Canvas Instances/CalloutCanvas Instance.uxml");
+        section.calloutAssetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
+        bool copied = AssetDatabase.CopyAsset(("Packages/com.adm.adm-toolkit/Runtime/UI/UXML Documents/CalloutCanvas.uxml"), section.calloutAssetPath);
+        Debug.Log(copied);
+        section.CalloutCanvasInstance = (VisualTreeAsset)AssetDatabase.LoadAssetAtPath(section.calloutAssetPath, typeof(VisualTreeAsset));
+        section.CalloutCanvasDocument.visualTreeAsset = section.CalloutCanvasInstance;
+        CalloutCanvas Canvas = section.CalloutCanvasDocument.rootVisualElement.Q<CalloutCanvas>("RootCalloutCanvas");
+        Canvas.section = section;
+    }
     public void InitializeTimeline(PresentationSection section, ProjectManager manager)
     {
         InputManager camManager = GameObject.FindFirstObjectByType<InputManager>();
 
         string filePath = (manager.currentProject + "/Timeline Instances/Timeline Instance.playable");
-        section.assetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
+        section.timelineAssetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
         //AssetDatabase.CreateAsset(camManager.TimelineTemplate, section.assetPath);
 
-        bool copied = AssetDatabase.CopyAsset(("Packages/com.adm.adm-toolkit/Runtime/Resources/ADM Toolkit/Timeline Template.playable"), section.assetPath);
+        bool copied = AssetDatabase.CopyAsset(("Packages/com.adm.adm-toolkit/Runtime/Resources/ADM Toolkit/Timeline Template.playable"), section.timelineAssetPath);
 
-        section.TimelineInstance = (TimelineAsset)AssetDatabase.LoadAssetAtPath(section.assetPath, typeof(TimelineAsset));
+        section.TimelineInstance = (TimelineAsset)AssetDatabase.LoadAssetAtPath(section.timelineAssetPath, typeof(TimelineAsset));
         section.director.playableAsset = section.TimelineInstance;
         if (manager.Sections.Count > 1)
         {

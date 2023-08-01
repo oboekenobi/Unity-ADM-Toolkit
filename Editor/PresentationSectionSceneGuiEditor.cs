@@ -41,7 +41,7 @@ public class PresentationSectionSceneGUI : Editor
             {
                 manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
                 manager.CanSwitchEditorCamera = true;
-                manager.EditorCameraSwitch(camera.Camera.VirtualCamera);
+                manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
             }
             if (manager.ActiveSection != manager.LastActiveSection)
             {

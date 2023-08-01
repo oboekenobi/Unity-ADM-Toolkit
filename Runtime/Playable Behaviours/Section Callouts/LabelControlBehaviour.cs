@@ -9,17 +9,33 @@ public class LabelControlBehaviour : PlayableBehaviour
 {
     public bool registered;
     public bool hasPlayed;
+    public ProjectManager projectManager;
 
   /*  float TagWidth = 0;
     float TagHeight = 0;*/
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
         float finalIntensity = 0f;
-        PresentationSection trackBinding = playerData as PresentationSection;
+        //PresentationSection trackBinding = playerData as PresentationSection;
         float TagWidth = 0f;
         float TagHeight = 0f;
 
-        if (!trackBinding)
+      /*if (!trackBinding)
+            return;*/
+
+        if (projectManager == null)
+        {
+            try
+            {
+                projectManager = GameObject.FindFirstObjectByType<ProjectManager>();
+            }
+            catch
+            {
+                return;
+            }
+        }
+
+        if (projectManager.ActiveSection.CallOuts.Count == 0)
             return;
 
         int inputCount = playable.GetInputCount(); //get the number of all clips on this track
@@ -36,7 +52,7 @@ public class LabelControlBehaviour : PlayableBehaviour
             {
                 if (!registered)
                 {
-                    RegisterEffect(trackBinding);
+                    RegisterEffect(projectManager.ActiveSection);
                     registered = true;
                 }
                 else if (hasPlayed)
@@ -55,7 +71,7 @@ public class LabelControlBehaviour : PlayableBehaviour
 
         if (!Effects_Manager.releaseCallOuts)
         {
-            foreach (CallOutLabel label in trackBinding.CallOuts)
+            foreach (CallOutLabel label in projectManager.ActiveSection.CallOuts)
             {
                 float halfFinal = Mathf.Clamp(finalIntensity * 2, 0, 1f);
                 float final = ((Mathf.Clamp(finalIntensity, 0.5f, 1f)) - 0.5f) * 2;
@@ -64,46 +80,54 @@ public class LabelControlBehaviour : PlayableBehaviour
                 TagWidth = (label.Fitter.glowBackground.rect.width * label.transform.localScale.y / 2);
                 TagHeight = (label.Fitter.glowBackground.rect.height * label.transform.localScale.y / 2);
 
-                for (int j = 0; j < label.UILines.Count; j++)
+                if(label.UILines.Count != 0)
                 {
-                    label.UILines[j].line.option.endRatio = halfFinal;
-                    label.UILines[j].GeometyUpdateFlagUp();
-                }
+                    for (int j = 0; j < label.UILines.Count; j++)
+                    {
+                        if (label.UILines[j] != null)
+                        {
+                            label.UILines[j].line.option.endRatio = halfFinal;
+                            label.UILines[j].GeometyUpdateFlagUp();
+                        }
+                    }
 
-                for(int j =0; j < label.CircleMaterials.Count; j++)
-                {
-                    label.CircleMaterials[j].SetFloat("_Alpha", halfFinal);
-                }
-                label.ParentGroup.alpha = final;
+                    for (int j = 0; j < label.CircleMaterials.Count; j++)
+                    {
+                        if (label.CircleMaterials[j] != null)
+                        {
+                            label.CircleMaterials[j].SetFloat("_Alpha", halfFinal);
+                        }
+                    }
+                    label.ParentGroup.alpha = final;
+                    //float TagWidth = label.TagWidth;
+                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Left)
+                    {
+                        Vector3 Offset = Vector3.left * TagWidth;
+                        label.ChildTag.localPosition = Offset * (1 - final);
+                    }
 
-
-                //float TagWidth = label.TagWidth;
-                if (label.LinePlacement == CallOutLabel.PlacementDirection.Left)
-                {
-                    Vector3 Offset = Vector3.left * TagWidth;
-                    label.ChildTag.localPosition = Offset * (1-final);
+                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Right)
+                    {
+                        Vector3 Offset = Vector3.right * TagWidth;
+                        label.ChildTag.localPosition = Offset * (1 - final);
+                    }
+                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Bottom)
+                    {
+                        Vector3 Offset = Vector3.down * TagHeight;
+                        label.ChildTag.localPosition = Offset * (1 - final);
+                    }
+                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Top)
+                    {
+                        Vector3 Offset = Vector3.up * TagHeight;
+                        label.ChildTag.localPosition = Offset * (1 - final);
+                    }
+                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Middle)
+                    {
+                        Vector3 Offset = Vector3.down * TagHeight;
+                        label.ChildTag.localPosition = Offset * (1 - final);
+                    }
                 }
-
-                if (label.LinePlacement == CallOutLabel.PlacementDirection.Right)
-                {
-                    Vector3 Offset = Vector3.right * TagWidth;
-                    label.ChildTag.localPosition = Offset * (1 - final);
-                }
-                if (label.LinePlacement == CallOutLabel.PlacementDirection.Bottom)
-                {
-                    Vector3 Offset = Vector3.down * TagHeight;
-                    label.ChildTag.localPosition = Offset * (1 - final);
-                }
-                if (label.LinePlacement == CallOutLabel.PlacementDirection.Top)
-                {
-                    Vector3 Offset = Vector3.up * TagHeight;
-                    label.ChildTag.localPosition = Offset * (1 - final);
-                }
-                if (label.LinePlacement == CallOutLabel.PlacementDirection.Middle)
-                {
-                    Vector3 Offset = Vector3.down * TagHeight;
-                    label.ChildTag.localPosition = Offset * (1 - final);
-                }
+                
 
             }
         }

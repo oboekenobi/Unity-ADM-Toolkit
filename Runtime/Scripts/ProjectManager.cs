@@ -84,6 +84,7 @@ public class ProjectManager : MonoBehaviour
     public string DefaultScreenSetting;
     public float DefaultMouseSensitivitySetting;
     public float DefaultPenStrokeSetting;
+    public bool DefaultPopupWarningSettings = true;
 
 #if UNITY_EDITOR
     private void OnEnable()
@@ -139,8 +140,6 @@ public class ProjectManager : MonoBehaviour
         if (Application.isPlaying)
         {
             Brain = GameObject.FindWithTag("Camera Manager").GetComponent<CinemachineBrain>();
-            CallOutCanvas = GameObject.FindWithTag("CallOut Canvas").GetComponent<CanvasGroup>();
-            ContrastLayer = GameObject.FindWithTag("Contrast Layer").GetComponent<CanvasGroup>();
 
             if(MasterControlPanel != null)
             {
@@ -207,11 +206,19 @@ public class ProjectManager : MonoBehaviour
         {
             if (IncludeWatermark)
             {
-                toolkitManager.WaterMark.SetActive(true);
+                VisualElement m_waterMark = uI_Manager.uIDocument.rootVisualElement.Q<VisualElement>("Watermark");
+                if(m_waterMark != null)
+                {
+                    m_waterMark.style.display = DisplayStyle.Flex;
+                }
             }
             else
             {
-                toolkitManager.WaterMark.SetActive(false);
+                VisualElement m_waterMark = uI_Manager.uIDocument.rootVisualElement.Q<VisualElement>("Watermark");
+                if (m_waterMark != null)
+                {
+                    m_waterMark.style.display = DisplayStyle.None;
+                }
             }
 
             Camera.main.backgroundColor = BackgroundColor;
@@ -418,20 +425,36 @@ public class ProjectManager : MonoBehaviour
                             ActiveSection.TweenCameras[j].gameObject.SetActive(false);
                         }
                     }
+                    if(ActiveSection.CallOutPoints.Count > 0)
+                    {
+                        foreach(GameObject point in ActiveSection.CallOutPoints)
+                        {
+                            if(point != null)
+                            {
+                                point.SetActive(false);
+                            }
+                        }
+                    }
                 }
 
                 for (int i = 0; i < Sections.Count; i++)
                 {
-                    if (Sections[i].Camera.VirtualCamera == VirtualCamera)
+                    if (Sections[i].sectionCamera.VirtualCamera == VirtualCamera)
                     {
+                        VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                        Container.RemoveFromClassList("activeCanvas");
+                        Container.AddToClassList("inactiveCanvas");
                         ActiveSection = Sections[i];
-                        ActiveSection.Camera.RayColor = ActiveSection.Camera.SelectedRayColor;
+                        VisualElement ActiveContainer = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                        ActiveContainer.RemoveFromClassList("inactiveCanvas");
+                        ActiveContainer.AddToClassList("activeCanvas");
+                        ActiveSection.sectionCamera.RayColor = ActiveSection.sectionCamera.SelectedRayColor;
                         ActiveSectionIndex = ActiveSection.SectionID;
                     }
 
-                    if (Sections[i].Camera.VirtualCamera != VirtualCamera)
+                    if (Sections[i].sectionCamera.VirtualCamera != VirtualCamera)
                     {
-                        Sections[i].Camera.RayColor = Sections[i].Camera.DeselectedRayColor;
+                        Sections[i].sectionCamera.RayColor = Sections[i].sectionCamera.DeselectedRayColor;
                     }
 
                 }
@@ -445,6 +468,14 @@ public class ProjectManager : MonoBehaviour
                         for(int i =0 ; i < ActiveSection.TweenCameras.Count; i++)
                         {
                             ActiveSection.TweenCameras[i].gameObject.SetActive(true);
+                        }
+                    }
+
+                    foreach (GameObject point in ActiveSection.CallOutPoints)
+                    {
+                        if (point != null)
+                        {
+                            point.SetActive(true);
                         }
                     }
                 }

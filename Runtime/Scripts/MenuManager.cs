@@ -189,33 +189,37 @@ public class MenuManager : VisualElement
 
     public void DisplayPopupWarning(string message, float delay)
     {
-        m_popupWarning.text = message;
-
-
-        m_popupWarning.style.transitionDuration = new List<TimeValue>()
+        if (uI_Manager.m_popMessageToggle.value)
         {
-            new TimeValue(0, TimeUnit.Second)
-        };
-        m_popupWarning.style.transitionDelay = new List<TimeValue>()
-        {
-            new TimeValue(0, TimeUnit.Second)
-        };
+            m_popupWarning.text = message;
+
+
+            m_popupWarning.style.transitionDuration = new List<TimeValue>()
+            {
+                new TimeValue(0, TimeUnit.Second)
+            };
+            m_popupWarning.style.transitionDelay = new List<TimeValue>()
+            {
+                new TimeValue(0, TimeUnit.Second)
+            };
 
 
 
-        m_popupWarning.style.opacity = 0.7f;
+            m_popupWarning.style.opacity = 0.7f;
 
+
+            m_popupWarning.style.transitionDelay = new List<TimeValue>()
+            {
+                new TimeValue(delay, TimeUnit.Second)
+            };
+            m_popupWarning.style.transitionDuration = new List<TimeValue>()
+            {
+                new TimeValue(3.5f, TimeUnit.Second)
+            };
+
+            m_popupWarning.style.opacity = 0;
+        }
         
-        m_popupWarning.style.transitionDelay = new List<TimeValue>()
-        {
-            new TimeValue(delay, TimeUnit.Second)
-        };
-        m_popupWarning.style.transitionDuration = new List<TimeValue>()
-        {
-            new TimeValue(3.5f, TimeUnit.Second)
-        };
-
-        m_popupWarning.style.opacity = 0;
     }
     public void CaptureScreen()
     {
@@ -390,6 +394,7 @@ public class MenuManager : VisualElement
     public void EnablePen()
     {
         UI_Manager.RestrictMovement = true;
+        uI_Manager.drawManager.InitCanvas();
         if (hasBeenClicked)
         {
             uI_Manager.drawManager.Clear();

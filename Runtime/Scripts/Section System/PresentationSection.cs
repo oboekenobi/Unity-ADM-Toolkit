@@ -12,11 +12,17 @@ using UnityEngine.UIElements;
 using static ADM.UISystem.PopupManager;
 using TMPro;
 using System.ComponentModel;
+using Codice.Client.BaseCommands.BranchExplorer;
 
 [ExecuteInEditMode]
 public class PresentationSection : MonoBehaviour
 {
     public Transform TestLinePoint;
+    public CalloutManager line;
+    public CalloutManager testLineDrawer;
+    VisualElement m_lineDrawer;
+    public List<CalloutManager> m_calloutManagerList = new List<CalloutManager>();
+    public UIDocument CalloutCanvasDocument;
 
     [HideInInspector]
     public ProjectManager manager;
@@ -26,7 +32,10 @@ public class PresentationSection : MonoBehaviour
     public Transform Pivot;
     public PlayableDirector director;
     public TimelineAsset TimelineInstance;
-    public string assetPath;
+    public VisualTreeAsset CalloutCanvasInstance;
+    public string calloutAssetPath;
+    public string timelineAssetPath;
+
     public bool playableInit;
     public bool SubSection;
     public bool hideTimeline;
@@ -108,6 +117,41 @@ public class PresentationSection : MonoBehaviour
                 uI_Manager.GenerateControls(ControlPanelOverride, this);
             }
         }
+
+        /*m_lineDrawer = uI_Manager.root.Q<VisualElement>("LineDrawer");
+
+        m_lineDrawer.generateVisualContent += testLineDrawer.OnGenerateVisualContent;*/
+    }
+
+    public void Update()
+    {
+        /*if(testLineDrawer!= null)
+        {
+            Vector2 screenPos = Camera.main.WorldToScreenPoint(TestLinePoint.position);
+            float scale = uI_Manager.uIDocument.panelSettings.scale;
+            Vector2 LinePos = new Vector2(screenPos.x / scale, (Screen.height - screenPos.y) / scale);
+
+            if (testLineDrawer.m_labelPoint != null)
+            {
+                testLineDrawer.m_labelPoint.style.left = LinePos.x;
+                testLineDrawer.m_labelPoint.style.top = LinePos.y;
+                //testLineDrawer.m_labelPoint.transform.position = LinePos;
+            }
+            else
+            {
+                Debug.Log("Test point is null");
+            }
+        }*/
+
+        if(testLineDrawer != null)
+        {
+            //testLineDrawer.MarkDirtyRepaint();
+        }
+        else
+        {
+
+        }
+        //LineDrawer
     }
 
 #if UNITY_EDITOR
@@ -139,7 +183,8 @@ public class PresentationSection : MonoBehaviour
             }
             if(gameObject.scene.isLoaded)
             {
-                AssetDatabase.DeleteAsset(assetPath);
+                AssetDatabase.DeleteAsset(timelineAssetPath);
+                AssetDatabase.DeleteAsset(calloutAssetPath);
             }
         }
         
@@ -165,7 +210,7 @@ public class PresentationSection : MonoBehaviour
     [Space(10)]
     
     public bool AutoSizeSlides;
-    public VirtualCameraObject Camera;
+    public VirtualCameraObject sectionCamera;
     [Space(10)]
     //[HideInInspector]
     public List<GameObject> CallOutGameObjects = new List<GameObject>();

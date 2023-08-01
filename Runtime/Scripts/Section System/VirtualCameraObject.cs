@@ -54,7 +54,7 @@ public class VirtualCameraObject : MonoBehaviour
         {
             for (int i = 0; i < manager.Sections.Count; i++)
             {
-                if (manager.Sections[i].Camera == this)
+                if (manager.Sections[i].sectionCamera == this)
                 {
                     section = manager.Sections[i];
                     if (manager.Sections[i].CallOutGameObjects.Count > 0)

@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 public class ADMToolkitManager : MonoBehaviour
 {
@@ -35,6 +35,7 @@ public class ADMToolkitManager : MonoBehaviour
     public GameObject TweenCameraPrefab;
     public GameObject LabelPrefab;
     public GameObject PictureLabelPrefab;
+    public VisualTreeAsset CalloutUXMLTemplate;
 
     public static CanvasGroup CallOutCanvas;
 
@@ -67,8 +68,6 @@ public class ADMToolkitManager : MonoBehaviour
         if (Application.isPlaying)
         {
             Brain = GameObject.FindWithTag("Camera Manager").GetComponent<CinemachineBrain>();
-            CallOutCanvas = GameObject.FindWithTag("CallOut Canvas").GetComponent<CanvasGroup>();
-            ContrastLayer = GameObject.FindWithTag("Contrast Layer").GetComponent<CanvasGroup>();
         }
 
 

@@ -1,0 +1,58 @@
+.callout-label {
+    scale: 1 1;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-property: scale;
+}
+
+.callout-label:hover {
+    scale: 1.2 1.2;
+    border-left-color: rgb(90, 201, 255);
+    border-right-color: rgb(90, 201, 255);
+    border-top-color: rgb(90, 201, 255);
+    border-bottom-color: rgb(90, 201, 255);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.callout-point {
+    border-top-left-radius: 90px;
+    border-bottom-left-radius: 90px;
+    border-top-right-radius: 90px;
+    border-bottom-right-radius: 90px;
+    width: 15px;
+    height: 15px;
+    max-width: 15px;
+    min-width: 15px;
+    min-height: 15px;
+    max-height: 15px;
+    position: absolute;
+    translate: -7.5px -7.5px;
+    flex-grow: 1;
+}
+
+.inactiveCanvas {
+    opacity: 0;
+    transition-property: opacity, display;
+    transition-duration: 0.2s, 0s;
+    transition-delay: 0s, 0.2s;
+    transition-timing-function: ease-in-out, ease;
+}
+
+.activeCanvas {
+    opacity: 1;
+    transition-property: display, opacity;
+    transition-duration: 0.4s, 0.2s;
+    transition-delay: 0s, 0s;
+    transition-timing-function: ease, ease-in-out;
+}

@@ -221,12 +221,12 @@ public class CallOutLabel : MonoBehaviour
     
     public void UpdateLineCount()
     {
+#if UNITY_EDITOR
         if (InterestPoints.Count > 0 && InterestPoints.Count > Lines.Count)
         {
             //Initialize LineRenderer Prefabs
 
-            //GameObject Line = PrefabUtility.InstantiatePrefab(LinePrefab) as GameObject;
-            GameObject Line = new GameObject();
+            GameObject Line = PrefabUtility.InstantiatePrefab(LinePrefab) as GameObject;
             Line.transform.parent = LabelParent.transform;
             Lines.Add(Line);
             UILine line = Line.GetComponent<UILine>();
@@ -242,8 +242,7 @@ public class CallOutLabel : MonoBehaviour
             UILines.Add(line);
 
             //Initialize CircleRenderer Prefabs
-            //GameObject Circle = PrefabUtility.InstantiatePrefab(CirclePrefab) as GameObject;
-            GameObject Circle = new GameObject();
+            GameObject Circle = PrefabUtility.InstantiatePrefab(CirclePrefab) as GameObject;
             Circle.transform.parent = (LabelParent.transform);
             Circles.Add(Circle.GetComponent<RectTransform>());
         }
@@ -305,7 +304,7 @@ public class CallOutLabel : MonoBehaviour
             PointAdded = false;
             StepPointAdded = false;
         }
-
+#endif
     }
 
     public Vector3[] lineEnd;

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Style%20Sheets/Callout.uss?fileID=7433441132597879392&amp;guid=d6dd133a7d494794789ea723e0ef0ce1&amp;type=3#Callout" />
+    <CalloutManager name="Callout">
+        <ui:VisualElement name="Label" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); min-width: auto; min-height: auto; width: auto; flex-shrink: 1; max-width: initial; flex-basis: auto; flex-direction: column-reverse; position: absolute; top: 74px; left: 459px;">
+            <Shadow shadow-corner-radius="20" name="Shadow" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; max-width: 100%; max-height: 100%; min-width: 100%; min-height: 100%; opacity: 0.51; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" />
+            <ui:Label text="Iplurbis Unumsdfsdfs" display-tooltip-when-elided="true" enable-rich-text="true" usage-hints="None" tabindex="0" focusable="true" class="callout-label" style="color: rgb(255, 255, 255); -unity-font-style: bold; -unity-font-definition: initial; -unity-font: url(&apos;project://database/Packages/com.adm.adm-toolkit/Runtime/Branding%20Resources/OpenSans_SemiCondensed-Light.ttf?fileID=12800000&amp;guid=c825e6395becd8b4db6ce13708f2acb6&amp;type=3#OpenSans_SemiCondensed-Light&apos;); font-size: 20px; flex-grow: 1; flex-shrink: 0; background-color: rgb(0, 0, 0); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; max-width: none; position: relative; flex-basis: initial; min-width: auto; width: auto;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LabelPoint" class="callout-point" style="flex-grow: 1; background-color: rgb(0, 0, 0); top: 256px; left: 341px;" />
+    </CalloutManager>
+</ui:UXML>

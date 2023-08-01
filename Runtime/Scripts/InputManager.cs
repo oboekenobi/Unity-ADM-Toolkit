@@ -360,10 +360,10 @@ namespace ADM.UISystem
             InitCamera = true;
             projectManager.ActiveSection.director.Play();
             projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(0);
-            CachedPivotPosition = projectManager.ActiveSection.Camera.PivotAngle.transform.position;
+            CachedPivotPosition = projectManager.ActiveSection.sectionCamera.PivotAngle.transform.position;
             //CachedDistance = Vector3.Distance(manager.ActiveSection.Camera.transform.position, manager.ActiveSection.Camera.PivotAngle.position);
            
-            StartPivotPosition = projectManager.ActiveSection.Camera.PivotAngle.position;
+            StartPivotPosition = projectManager.ActiveSection.sectionCamera.PivotAngle.position;
 
             //Values to set the camera to the default position
             slerpedValue = slerpValue;
@@ -397,10 +397,10 @@ namespace ADM.UISystem
            
             for (int i = 0; i < projectManager.Sections.Count; i++)
             {
-                if (projectManager.Sections[i].Camera != null)
+                if (projectManager.Sections[i].sectionCamera != null)
                 {
-                    DefaultCameraPositions.Add(projectManager.Sections[i].Camera.CameraChild.transform.position);
-                    DefaultCameraRotations.Add(projectManager.Sections[i].Camera.CameraChild.transform.eulerAngles);
+                    DefaultCameraPositions.Add(projectManager.Sections[i].sectionCamera.CameraChild.transform.position);
+                    DefaultCameraRotations.Add(projectManager.Sections[i].sectionCamera.CameraChild.transform.eulerAngles);
                 }
             }
 
@@ -540,12 +540,12 @@ namespace ADM.UISystem
 
                     if (CurrentBlend >= 0.99f && canStopTransition && projectManager.ActiveSection.director.time != 0 && !UI_Manager.isScrubbing && !CameraRotated)
                     {
-                        target = projectManager.ActiveSection.Camera.PivotAngle;
+                        target = projectManager.ActiveSection.sectionCamera.PivotAngle;
                         ScrollWheel = 0;
                         ScrollWheelChange = 0;
                         if (uI_Manager.PreviousPresentationSection != null)
                         {
-                            ResetPreviousCamera(uI_Manager.PreviousPresentationSection.Camera.VirtualCamera);
+                            ResetPreviousCamera(uI_Manager.PreviousPresentationSection.sectionCamera.VirtualCamera);
                         }
 
                         isTransitioning = false;
@@ -583,7 +583,7 @@ namespace ADM.UISystem
         }
 
         public float CurrentBlend;
-        public Vector3 BlendedCameraPivot()
+        public Vector3  BlendedCameraPivot()
         {
 
             //Vector3 blend = ((MainCameraTransform.position) + (MainCameraTransform.forward * distanceBetweenCameraAndTarget()));
@@ -714,10 +714,10 @@ namespace ADM.UISystem
         {
             for (int i = 0; i < projectManager.Sections.Count; i++)
             {
-                if (projectManager.Sections[i].Camera.VirtualCamera == Cam)
+                if (projectManager.Sections[i].sectionCamera.VirtualCamera == Cam)
                 {
                     Cam.transform.position = DefaultCameraPositions[i];
-                    Cam.transform.LookAt(projectManager.Sections[i].Camera.PivotAngle);
+                    Cam.transform.LookAt(projectManager.Sections[i].sectionCamera.PivotAngle);
 /*                    MainCameraTransform.position = DefaultCameraPositions[i];
                     MainCameraTransform.LookAt(manager.Sections[i].Camera.PivotAngle);*/
                     break;

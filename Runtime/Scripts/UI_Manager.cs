@@ -46,6 +46,32 @@ namespace ADM.UISystem
                 SetControlPanel(_currentControlPanel);
             }
         }
+        private CalloutManager _currentCalloutCanvas;
+        public CalloutManager currentCalloutCanvas
+        {
+            get => _currentCalloutCanvas;
+            set
+            {
+                if(_currentCalloutCanvas != null)
+                {
+                    if (_currentCalloutCanvas == value)
+                        return;
+                    //unrgister callbacks here
+
+                    //deactive the last callout canvas
+
+                    _currentCalloutCanvas.RemoveFromClassList("activeCalloutCanvas");
+                    _currentCalloutCanvas.AddToClassList("inactiveCalloutCanvas");
+                    _currentCalloutCanvas.style.display = DisplayStyle.None;
+                }
+                _currentCalloutCanvas = value;
+                if (_currentCalloutCanvas == null)
+                    return;
+                ChangeCalloutCanvas();
+                //register callbacks here
+                
+            }
+        }
         #endregion
 
         #region UIElement Dependencies
@@ -76,6 +102,7 @@ namespace ADM.UISystem
         public Toggle PlayButton;
         public Toggle PanButton;
         public Toggle PenButton;
+        public Toggle m_popMessageToggle;
         public Toggle m_rememberMySettingsToggle;
         public Label SectionTitle;
         public Label ExhibitCounter;
@@ -83,6 +110,7 @@ namespace ADM.UISystem
         public Label m_versionNotes;
         public VisualElement HelpScreenInfo;
         public Slider m_mouseSensitivitySlider;
+        public Slider m_penStrokeSlider;
 
         public DropdownField screenSelection;
         public DropdownField ThemePicker;
@@ -106,13 +134,13 @@ namespace ADM.UISystem
         public VisualElement m_compass;
         public VisualElement m_controlsContainer;
         public VisualElement m_controlPanelTitleLayout;
-        public Slider m_penStrokeSlider;
         public VisualElement m_laserPointerToolTip;
         public VisualElement m_penLayout;
         public VisualElement m_markerLayout;
         public VisualElement m_currentControlPanel;
         public VisualElement TitleBackground;
         public VisualElement m_defaultSettingsButton;
+
         public UnityEngine.UIElements.Label m_controlPanelTitle;
         #endregion
 
@@ -149,6 +177,9 @@ namespace ADM.UISystem
         public static bool RestrictMovement;
         public static bool isFullScreen;
         public static bool DrawingMode;
+
+        public Vector3 OriginalCameraPosition;
+        public Quaternion OriginalCameraRotation;
         #endregion
         
         // *------------------------------------------------------------------------* //
@@ -189,7 +220,7 @@ namespace ADM.UISystem
             m_markerLayout = root.Q<VisualElement>("MarkerLayout");
             m_defaultSettingsButton = root.Q<VisualElement>("DefaultSettingsButton");
             m_penLayout = root.Q<VisualElement>("LaserPointerTexture");
-
+            m_popMessageToggle = root.Q<Toggle>("PopupMessageToggle");
             m_versionLabel = root.Q<Label>("VersionLabel");
             m_versionNotes = root.Q<Label>("VersionNotes");
 
@@ -253,6 +284,7 @@ namespace ADM.UISystem
 
             m_penStrokeSlider = root.Q<Slider>("PenStrokeSlider");
             m_penStrokeSlider?.RegisterValueChangedCallback(ev => ChangePenStroke(m_penStrokeSlider.value));
+            m_popMessageToggle?.RegisterCallback<MouseDownEvent>(ev => SetPopupSettings());
 
             HelpScreenInfo.RegisterCallback<MouseDownEvent>(evt => OpenStartInfoPanel());
             m_mouseSensitivitySlider?.RegisterValueChangedCallback(ev => ChangeMouseSensitivity(m_mouseSensitivitySlider.value));
@@ -358,6 +390,22 @@ namespace ADM.UISystem
                 InputManager.PopupOpen = true;
             }
 
+            foreach(PresentationSection section in projectManager.Sections)
+            {
+                if(section == projectManager.ActiveSection)
+                {
+                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                    Container.RemoveFromClassList("inactiveCanvas");
+                    Container.AddToClassList("activeCanvas");
+                }
+                else
+                {
+                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                    Container.RemoveFromClassList("activeCanvas");
+                    Container.AddToClassList("inactiveCanvas");
+                }
+            }
+
             cam.MainCameraTransform.localPosition = Vector3.zero;
             cam.MainCameraTransform.localEulerAngles = Vector3.zero;
         }
@@ -432,6 +480,56 @@ namespace ADM.UISystem
 
         #region UIelement Callback Functions
         private bool controlsWereAdded;
+
+
+        public void ChangeCalloutCanvas()
+        {
+            _currentCalloutCanvas.style.display = DisplayStyle.Flex;
+
+            _currentCalloutCanvas.RemoveFromClassList("inactiveCalloutCanvas");
+            _currentCalloutCanvas.AddToClassList("activeCalloutCanvas");
+        }
+
+        public void ResetCamera()
+        {
+            projectManager.ActiveSection.sectionCamera.transform.position = OriginalCameraPosition;
+            projectManager.ActiveSection.sectionCamera.transform.rotation = OriginalCameraRotation;
+        }
+        public void SetPopupSettings()
+        {
+            if (Application.isPlaying)
+            {
+                if (canLoadDefaultSettings)
+                {
+                    m_popMessageToggle.value = projectManager.DefaultPopupWarningSettings;
+                }
+                if (canLoadPlayerPrefs)
+                {
+                    if (PlayerPrefs.GetString("PopupMessageWarning") == "True")
+                    {
+                        m_popMessageToggle.value = true;
+                    }
+                    if (PlayerPrefs.GetString("PopupMessageWarning") == "False")
+                    {
+                        m_popMessageToggle.value = false;
+                    }
+                }
+                else if (m_rememberMySettingsToggle.value)
+                {
+                    if (m_popMessageToggle.value)
+                    {
+                        PlayerPrefs.SetString("PopupMessageWarning", "True");
+                    }
+                    else
+                    {
+                        PlayerPrefs.SetString("PopupMessageWarning", "False");
+                    }
+                }
+            }
+            
+            
+        }
+
         public void SetControlPanel(ControlPanel controlPanel)
         {
             if (projectManager.MasterControlPanel.menuBindings.Count > 0 && projectManager.ActiveSection.GeneratedControls.Count == 0 || projectManager.ActiveSection.GeneratedControls.Count > 0 && projectManager.ActiveSection.OverrideType == PresentationSection.ControlPanleOverrideType.ReplaceControls)
@@ -441,7 +539,6 @@ namespace ADM.UISystem
                     foreach(VisualElement control in PreviousPresentationSection.GeneratedControls)
                     {
                         control.RemoveFromHierarchy();
-                        Debug.Log("Control Removed");
                     }
                     controlsWereAdded = false;
                 }
@@ -714,6 +811,7 @@ namespace ADM.UISystem
 
             if (Application.isPlaying)
             {
+                drawManager.ChangeSize();
                 if (m_rememberMySettingsToggle.value)
                 {
                     penSizeSetting = value;
@@ -731,17 +829,25 @@ namespace ADM.UISystem
             if (value)
             {
                 PlayerPrefs.SetString("RememberSettings", "True");
+
+                PlayerPrefs.SetInt("Graphics", GraphicsPicker.index);
+                PlayerPrefs.SetInt("Theme", ThemePicker.index);
+                PlayerPrefs.SetInt("ScreenSize", screenSelection.index);
+                PlayerPrefs.SetFloat("MouseSensitvity", m_mouseSensitivitySlider.value);
+                PlayerPrefs.SetFloat("PenStroke", m_penStrokeSlider.value);
+                if (m_popMessageToggle.value)
+                {
+                    PlayerPrefs.SetString("PopupMessageWarning", "True");
+                }
+                else
+                {
+                    PlayerPrefs.SetString("PopupMessageWarning", "Flase");
+                }
             }
             else
             {
                 PlayerPrefs.SetString("RememberSettings", "False");
             }
-
-            PlayerPrefs.SetInt("Graphics", GraphicsPicker.index);
-            PlayerPrefs.SetInt("Theme", ThemePicker.index);
-            PlayerPrefs.SetInt("ScreenSize", screenSelection.index);
-            PlayerPrefs.SetFloat("MouseSensitvity", m_mouseSensitivitySlider.value);
-            PlayerPrefs.SetFloat("PenStroke", m_penStrokeSlider.value);
         }
 
         /*public void CaptureScreenRecording()
@@ -1173,6 +1279,9 @@ namespace ADM.UISystem
         {            
             if (targetSection != projectManager.ActiveSection)
             {
+                //Establish the original position of the Camera
+
+
                 //targetSection.Markers.gameObject.SetActive(true);
 
                 PresentationSection activeSection = targetSection;
@@ -1272,11 +1381,32 @@ namespace ADM.UISystem
                     }
                 }
 
-              
+
+                VisualElement Container = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                Container.RemoveFromClassList("activeCanvas");
+                Container.AddToClassList("inactiveCanvas");
+                if (PreviousPresentationSection.CallOutPoints.Count > 0)
+                {
+                    foreach (GameObject point in PreviousPresentationSection.CallOutPoints)
+                    {
+                        point.SetActive(true);
+                    }
+                }
 
                 targetSection.director.RebuildGraph();
                 projectManager.ActiveSection = targetSection;
                 ChangeTitle();
+
+                VisualElement ActiveContainer = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                ActiveContainer.RemoveFromClassList("inactiveCanvas");
+                ActiveContainer.AddToClassList("activeCanvas");
+                if(targetSection.CallOutPoints.Count > 0)
+                {
+                    foreach(GameObject point in targetSection.CallOutPoints)
+                    {
+                        point.SetActive(true);
+                    }
+                }
 
                 if (targetSection.ControlPanelOverride.menuBindings.Count > 0)
                 {
@@ -1402,7 +1532,10 @@ namespace ADM.UISystem
         public float mouseSensitivitySetting;
         public float penSizeSetting;
         public string saveSettingsSetting;
+        public string popupWarningSetting;
+
         private bool canLoadDefaultSettings;
+        private bool canLoadPlayerPrefs;
         public void InitializePlayerPrefs()
         {
             //ThemePicker.choices = ThemeNames;
@@ -1412,6 +1545,7 @@ namespace ADM.UISystem
 
             if (PlayerPrefs.HasKey("RememberSettings"))
             {
+                canLoadPlayerPrefs = true;
                 if (PlayerPrefs.GetString("RememberSettings") == "True")
                 {
                     m_rememberMySettingsToggle.value = true;
@@ -1421,6 +1555,7 @@ namespace ADM.UISystem
                     ChangeGraphicsSettings(PlayerPrefs.GetInt("Graphics"));
                     ChangePenStroke(PlayerPrefs.GetFloat("PenStroke"));
                     ChangeMouseSensitivity(PlayerPrefs.GetFloat("MouseSensitivity"));
+                    SetPopupSettings();
                 }
                 else
                 {
@@ -1428,6 +1563,7 @@ namespace ADM.UISystem
                     m_rememberMySettingsToggle.value = false;
                     LoadDefaultPlayerPrefs();
                 }
+                canLoadPlayerPrefs = false;
             }
             else
             {
@@ -1484,9 +1620,9 @@ namespace ADM.UISystem
                     ChangeGraphicsSettings(3);
                 }
 
-                Debug.Log("Default Settings Loaded"!);
                 ChangePenStroke(projectManager.DefaultPenStrokeSetting);
                 ChangeMouseSensitivity(projectManager.DefaultMouseSensitivitySetting);
+                SetPopupSettings();
             }
             canLoadDefaultSettings = false;
         }

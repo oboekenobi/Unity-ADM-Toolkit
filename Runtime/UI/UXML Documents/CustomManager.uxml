@@ -37,6 +37,7 @@
                 <ui:DropdownField label="Graphics" index="0" choices="Fastest,Fast,Medium,High" binding-path="DefaultGraphicsSetting" class="editor-Text" />
                 <ui:Slider picking-mode="Ignore" label="Pen stroke size" value="0.01" high-value="0.05" show-input-field="true" low-value="0.003" binding-path="DefaultPenStrokeSetting" class="editor-Text" style="-unity-text-align: middle-left; align-items: center;" />
                 <ui:Slider picking-mode="Ignore" label="Mouse sensitivity" value="0.2" high-value="0.4" show-input-field="true" low-value="0.1" binding-path="DefaultMouseSensitivitySetting" class="editor-Text" style="-unity-text-align: middle-left; align-items: center;" />
+                <ui:Toggle label="Display Popup Warnings" binding-path="DefaultPopupWarningSettings" />
             </ui:Foldout>
             <ui:Button text="Render Preview" display-tooltip-when-elided="true" tooltip="Render out a video file of the project in sequential order" name="RenderButton" class="editor-Text" style="padding-top: 10px; padding-bottom: 10px; margin-top: 0; margin-bottom: 10px; -unity-font-style: bold; padding-left: 10px; padding-right: 10px; margin-right: 20px; margin-left: 20px; scale: 0.9 0.9; font-size: 20px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; flex-shrink: 1; max-width: 200px; align-items: center; align-self: center; -unity-font-definition: initial; color: rgb(255, 255, 255);" />
         </ui:VisualElement>
