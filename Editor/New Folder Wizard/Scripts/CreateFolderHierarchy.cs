@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 
 namespace NewFolderWizard
 {
@@ -32,7 +33,7 @@ namespace NewFolderWizard
 
             manager.currentProject = ParentFolder;
 
-            EditorApplication.SaveScene(ParentFolder + "/Scenes");
+            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), ParentFolder + "/Scenes/" + NewFoldersSetupWizard.ExhibitCode + "_Scene_01.unity");
 
             Debug.Log("Folder Creation Successful!");
         }

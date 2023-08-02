@@ -223,7 +223,6 @@ class PictureLabel : EditorToolbarButton//, IAccessContainerWindow
 
         //var newObj = GameObject.Instantiate(Resources.Load<GameObject>("PreFabs/Picture Label"), GameObject.FindWithTag("CallOut Canvas").transform, false);
         newObj.name = "Empty Picture Label";
-        manager.Sections[manager.ActiveSectionIndex].CallOutGameObjects.Add(newObj);
         // When writing editor tools don't forget to be a good citizen and implement Undo!
 
         Undo.RegisterCreatedObjectUndo(newObj.gameObject, "Create Picture Label");
@@ -331,7 +330,7 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
 
     public void InitializeCalloutCanvas(PresentationSection section, ProjectManager manager)
     {
-        string filePath = (manager.currentProject + "/Callout Canvas Instances/CalloutCanvas Instance.uxml");
+        string filePath = (manager.currentProject + "/Runtime Data (Do not delete)/Callout Canvas Instances/CalloutCanvas Instance.uxml");
         section.calloutAssetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
         bool copied = AssetDatabase.CopyAsset(("Packages/com.adm.adm-toolkit/Runtime/UI/UXML Documents/CalloutCanvas.uxml"), section.calloutAssetPath);
         Debug.Log(copied);
@@ -344,7 +343,7 @@ class InteractionCamera : EditorToolbarButton//, IAccessContainerWindow
     {
         InputManager camManager = GameObject.FindFirstObjectByType<InputManager>();
 
-        string filePath = (manager.currentProject + "/Timeline Instances/Timeline Instance.playable");
+        string filePath = (manager.currentProject + "/Runtime Data (Do not delete)/Timeline Instances/Timeline Instance.playable");
         section.timelineAssetPath = AssetDatabase.GenerateUniqueAssetPath(filePath);
         //AssetDatabase.CreateAsset(camManager.TimelineTemplate, section.assetPath);
 

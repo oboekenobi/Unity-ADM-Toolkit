@@ -11,8 +11,6 @@ using Cinemachine.PostFX;
 using UnityEngine.UIElements;
 using static ADM.UISystem.PopupManager;
 using TMPro;
-using System.ComponentModel;
-using Codice.Client.BaseCommands.BranchExplorer;
 
 [ExecuteInEditMode]
 public class PresentationSection : MonoBehaviour
@@ -167,10 +165,6 @@ public class PresentationSection : MonoBehaviour
         {
             if (manager != null)
             {
-                for (int i = 0; i < CallOutGameObjects.Count; i++)
-                {
-                    manager.toolkitManager.GarbageCollection.Add(CallOutGameObjects[i]);
-                }
                 for (int i = 0; i < manager.Sections.Count; i++)
                 {
                     if (manager.Sections[i] == this)
@@ -212,20 +206,12 @@ public class PresentationSection : MonoBehaviour
     public bool AutoSizeSlides;
     public VirtualCameraObject sectionCamera;
     [Space(10)]
-    //[HideInInspector]
-    public List<GameObject> CallOutGameObjects = new List<GameObject>();
-    //[HideInInspector]
-    public List<CallOutLabel> CallOuts = new List<CallOutLabel>();
-    //[HideInInspector]
-    public List<VisualLabel> VisualLabels = new List<VisualLabel>();
-    //[HideInInspector]
     public List<GameObject> CallOutPoints = new List<GameObject>();
 
     public List<TextMeshPro> WorldspaceLabels = new List<TextMeshPro>();
 
     public List<TweenCamera> TweenCameras = new List<TweenCamera>();
 
-    //[HideInInspector]
     public int SectionID;
     
     public float FadeDelay;

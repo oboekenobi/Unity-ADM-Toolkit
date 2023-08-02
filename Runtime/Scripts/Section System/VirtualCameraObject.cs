@@ -57,13 +57,6 @@ public class VirtualCameraObject : MonoBehaviour
                 if (manager.Sections[i].sectionCamera == this)
                 {
                     section = manager.Sections[i];
-                    if (manager.Sections[i].CallOutGameObjects.Count > 0)
-                    {
-                        for (int j = 0; j < manager.Sections[i].CallOutGameObjects.Count; j++)
-                        {
-                            DestroyImmediate(manager.Sections[i].CallOutGameObjects[j]);
-                        }
-                    }
                     manager.Sections.RemoveAt(i);
                     Debug.Log("Section Removed");
                 }

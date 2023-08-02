@@ -239,153 +239,12 @@ public class ProjectManager : MonoBehaviour
    
     #region Editor Cinemachine Camera Previewing
 
-    public void SwitchEditorCameraCallOuts(PresentationSection section)
-    {
-
-        if (ActiveSection.CallOutGameObjects != null)
-        {
-            for (int i = 0; i < ActiveSection.CallOutGameObjects.Count; i++)
-            {
-                section.CallOutGameObjects[i].SetActive(true);
-            }
-            for (int i = 0; i < Sections.Count; i++)
-            {
-                if (Sections[i] != ActiveSection)
-                {
-                    for (int j = 0; j < Sections[i].CallOutGameObjects.Count; j++)
-                    {
-                        Sections[i].CallOutGameObjects[j].SetActive(false);
-                    }
-                }
-            }
-            if(section.CallOutPoints.Count != 0)
-            {
-                for (int i = 0; i < ActiveSection.CallOutPoints.Count; i++)
-                {
-                    if(ActiveSection.CallOutPoints[i] != null)
-                    {
-                        ActiveSection.CallOutPoints[i].SetActive(true);
-                    }
-                }
-                for (int i = 0; i < Sections.Count; i++)
-                {
-                    if (Sections[i] != ActiveSection)
-                    {
-                        for (int j = 0; j < Sections[i].CallOutPoints.Count; j++)
-                        {
-                            if (Sections[i].CallOutPoints[j] != null)
-                            {
-                                Sections[i].CallOutPoints[j].SetActive(false);
-                            }
-                            else
-                            {
-                                Sections[i].CallOutGameObjects.RemoveAt(j);                             
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(ActiveSection.CallOutGameObjects == null)
-        {
-            for (int i = 0; i < Sections.Count; i++)
-            {
-                if (Sections[i] != ActiveSection)
-                {
-                    if(Sections[i].CallOutGameObjects != null)
-                    {
-                        for (int j = 0; j < Sections[i].CallOutGameObjects.Count; j++)
-                        {
-                            Sections[i].CallOutGameObjects[j].SetActive(false);
-                        }
-                    }
-                }
-            }
-            if (section.CallOutPoints.Count != 0)
-            {
-                for (int i = 0; i < Sections.Count; i++)
-                {
-                    if (Sections[i] != ActiveSection)
-                    {
-                        for (int j = 0; j < Sections[i].CallOutPoints.Count; j++)
-                        {
-                            Sections[i].CallOutPoints[j].SetActive(false);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    public void SwitchRunTimeCallOuts(PresentationSection section, bool Change)
-    {
-        StartCoroutine(LabelSwitch(section, Change));
-        if (Change)
-        {
-            if (section.CallOutGameObjects.Count > 0)
-            {
-                for (int i = 0; i < section.CallOuts.Count; i++)
-                {
-                    section.CallOuts[i].OpenLabel();
-                }
-            }
-            if (section.VisualLabels.Count > 0)
-            {
-                for (int i = 0; i < section.VisualLabels.Count; i++)
-                {
-                    section.VisualLabels[i].OpenLabel();
-                }
-            }
-            
-        }
-        if (!Change)
-        {
-            if (section.CallOutGameObjects.Count > 0)
-            {
-                for (int i = 0; i < section.CallOuts.Count; i++)
-                {
-                    section.CallOuts[i].CloseLabel();
-                }
-            }
-            if (section.VisualLabels.Count > 0)
-            {
-                for (int i = 0; i < section.VisualLabels.Count; i++)
-                {
-                    section.VisualLabels[i].CloseLabel();
-                }
-            }
-        }
-    }
 
 
     public static float CallOutsValue;
     public static bool CallOutIsTransitioning;
     public bool CanSwitchEditorCamera;
-    public IEnumerator LabelSwitch(PresentationSection section, bool Active)
-    {
-        CallOutIsTransitioning = true;
-        if (Active)
-        {
-            for (int i = 0; i < section.CallOutGameObjects.Count; i++)
-            {
-                
-                section.CallOutGameObjects[i].SetActive(true);
-            }
-        }
-        
-        yield return new WaitForSeconds(section.CallOutSettings.settings.TransitionDuration);
-        
-        CallOutIsTransitioning = false;
-
-        if (!Active)
-        {
-            for (int i = 0; i < section.CallOutGameObjects.Count; i++)
-            {
-                section.CallOutGameObjects[i].SetActive(false);
-                
-        
-            }
-        }
-    }
+   
     
     public void EditorCameraSwitch(CinemachineVirtualCamera VirtualCamera)
     {
@@ -480,7 +339,6 @@ public class ProjectManager : MonoBehaviour
                     }
                 }
 
-                SwitchEditorCameraCallOuts(ActiveSection);
             }
 #endif  
             CanSwitchEditorCamera = false;

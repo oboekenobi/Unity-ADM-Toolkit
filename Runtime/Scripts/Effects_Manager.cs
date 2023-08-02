@@ -46,7 +46,7 @@ public class Effects_Manager : MonoBehaviour
 
 
     public static List<Material> ActiveXRayMaterials = new List<Material>();
-    public static List<CallOutLabel> ActiveCalloutLabels = new List<CallOutLabel>();
+
     public static List<Material> ActiveAlphaFadeObject = new List<Material>();
 
 
@@ -162,90 +162,6 @@ public class Effects_Manager : MonoBehaviour
         }
     }
 
-    public void CloseLabels(PresentationSection lastSection)
-    {
-        StartCoroutine(CloseCallouts(lastSection));
-    }
-
-    public IEnumerator CloseCallouts(PresentationSection section)
-    {
-        if(section.CallOuts.Count > 0)
-        {
-            float elapsedTime = 0f;
-            float intensity = 1f;
-            float TagHeight = 0;
-            float TagWidth = 0;
-            float duration = 0.2f;
-            //float duration = CalloutDuration;
-            releaseCallOuts = true;
-            while(elapsedTime <= duration)
-            {
-                intensity = Mathf.Lerp(1, 0, elapsedTime / duration);
-                foreach (CallOutLabel label in section.CallOuts)
-                {
-                    float halfFinal = Mathf.Clamp(intensity * 2, 0, 1f);
-                    float final = ((Mathf.Clamp(intensity, 0.5f, 1f)) - 0.5f) * 2;
-                    label.ChildTag.localScale = new Vector3(label.ChildTag.localScale.y * final, label.ChildTag.localScale.y, label.ChildTag.localScale.z);
-                    TagWidth = (label.Fitter.glowBackground.rect.width * label.transform.localScale.y / 2);
-                    TagHeight = (label.Fitter.glowBackground.rect.height * label.transform.localScale.y / 2);
-
-                    for (int j = 0; j < label.UILines.Count; j++)
-                    {
-                        label.UILines[j].line.option.endRatio = halfFinal;
-                        label.UILines[j].GeometyUpdateFlagUp();
-
-                    }
-                    for (int j = 0; j < label.CircleMaterials.Count; j++)
-                    {
-                        label.CircleMaterials[j].SetFloat("_Alpha", halfFinal);
-                    }
-                    label.ParentGroup.alpha = final;
-
-
-
-                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Left)
-                    {
-                        Vector3 Offset = Vector3.left * TagWidth;
-                        Vector3 Direction = Offset + (Vector3.right * (TagWidth * final));
-                        label.ChildTag.localPosition = Offset * (1 - final);
-                    }
-
-                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Right)
-                    {
-                        Vector3 Offset = Vector3.right * TagWidth;
-                        Vector3 Direction = Offset + (Vector3.left * (TagWidth * final));
-                        label.ChildTag.localPosition = Offset * (1 - final);
-                    }
-                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Bottom)
-                    {
-                        Vector3 Offset = Vector3.down * TagHeight;
-                        Vector3 Direction = Offset + (Vector3.up * (TagHeight * final));
-                        label.ChildTag.localPosition = Offset * (1 - final);
-                    }
-                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Top)
-                    {
-                        Vector3 Offset = Vector3.up * TagHeight;
-                        Vector3 Direction = Offset + (Vector3.down * (TagHeight * final));
-                        label.ChildTag.localPosition = Offset * (1 - final);
-                    }
-                    if (label.LinePlacement == CallOutLabel.PlacementDirection.Middle)
-                    {
-                        Vector3 Offset = Vector3.down * TagHeight;
-                        Vector3 Direction = Offset + (Vector3.up * (TagHeight * final));
-                        label.ChildTag.localPosition = Offset * (1 - final);
-                    }
-
-                }
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            for (int i = 0; i < section.CallOutGameObjects.Count; i++)
-            {
-                section.CallOutGameObjects[i].SetActive(false);
-                releaseCallOuts = false;
-            }
-        }
-    }
     public void CutOutTransition()
     {
         FromCutOut = false;

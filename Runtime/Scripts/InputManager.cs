@@ -9,7 +9,6 @@ using UnityEngine.Playables;
 using UnityEditor;
 using Cinemachine.PostFX;
 using UnityEngine.UIElements;
-using geniikw.DataRenderer2D;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.VisualScripting;
@@ -372,20 +371,6 @@ namespace ADM.UISystem
             CachedDistance = Vector3.Distance(projectManager.ActiveSection.VirtualCamera.transform.position, projectManager.ActiveSection.Pivot.position);
             ZoomDistance = new Vector3(0, 0, -CachedDistance);
 
-            if (projectManager.Sections[0].CallOutGameObjects.Count > 0)
-            {
-                //manager.SwitchRunTimeCallOuts(manager.Sections[0], true);
-            }
-            foreach (PresentationSection V in projectManager.Sections)
-            {
-                if(V.CallOutGameObjects.Count > 0 && V != projectManager.ActiveSection)
-                {
-                    for(int i = 0; i < V.CallOutGameObjects.Count; i++)
-                    {
-                        V.CallOutGameObjects[i].SetActive(false);
-                    }
-                }
-            }
             if (projectManager.ActiveSection.SectionTitle != null)
             {
                 uI_Manager.ChangeTitle();

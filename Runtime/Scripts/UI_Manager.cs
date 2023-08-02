@@ -462,6 +462,7 @@ namespace ADM.UISystem
                     if (isFullScreen)
                     {
                         Screen.SetResolution(PreviousScreenWidth, PreviousScreenHeight, false);
+                        menuManager.m_FullScreenButton.value = false;
                         Screen.fullScreen = false;
                     }
                 }
@@ -1481,7 +1482,6 @@ namespace ADM.UISystem
                 PreviousPresentationSection.CustomMenu.MenuElement.style.display = DisplayStyle.None;
             }
 
-            yield return StartCoroutine(Transition.CloseCallouts(PreviousPresentationSection));
 
             cam.SetCinemachineCamera();
             PreviousPresentationSection.director.Stop();

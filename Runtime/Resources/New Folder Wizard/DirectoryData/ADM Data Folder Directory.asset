@@ -10,27 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea892b54eeef74b6989e615f1df83be8, type: 3}
-  m_Name: ADM Folder Directory
+  m_Name: ADM Data Folder Directory
   m_EditorClassIdentifier: 
   editorNotes: 
   Folders:
     m_keys:
+    - Callout Canvas Instances
     - Timeline Instances
-    - Imported Meshes
-    - Animation Clips
-    - Materials
-    - Textures
-    - Scenes
+    - Popup Instances
     m_values:
-    - IsEnabled: 0
+    - IsEnabled: 1
       ChildDirectoryData: {fileID: 0}
-    - IsEnabled: 0
+    - IsEnabled: 1
       ChildDirectoryData: {fileID: 0}
-    - IsEnabled: 0
-      ChildDirectoryData: {fileID: 0}
-    - IsEnabled: 0
-      ChildDirectoryData: {fileID: 0}
-    - IsEnabled: 0
-      ChildDirectoryData: {fileID: 0}
-    - IsEnabled: 0
+    - IsEnabled: 1
       ChildDirectoryData: {fileID: 0}

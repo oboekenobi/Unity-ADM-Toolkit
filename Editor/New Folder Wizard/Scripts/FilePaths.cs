@@ -5,7 +5,7 @@
     /// </summary>
     struct FilePaths
     {
-        private const string RootDirectoryFileName = "ADM Folder Directory";
+        private const string RootDirectoryFileName = "ADM Asset Folder Directory";
 
         public const string PathToAssetsFolder = "Assets/Example Folders Will Be Made Here";
         public const string ResourceFolderRelativePathToDirectories = "New Folder Wizard/DirectoryData/";

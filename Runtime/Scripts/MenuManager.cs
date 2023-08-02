@@ -36,7 +36,7 @@ public class MenuManager : VisualElement
     VisualElement m_GameWindow;
     VisualElement m_sliderTracker;
     VisualElement m_screenCaptureButton;
-    Toggle m_FullScreenButton;
+    public Toggle m_FullScreenButton;
     public Label ExhibitsTab;
     public Label SettingsTab;
     public Label ToolsTab;
