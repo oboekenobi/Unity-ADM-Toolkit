@@ -394,13 +394,13 @@ namespace ADM.UISystem
             {
                 if(section == projectManager.ActiveSection)
                 {
-                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                     Container.RemoveFromClassList("inactiveCanvas");
                     Container.AddToClassList("activeCanvas");
                 }
                 else
                 {
-                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                    VisualElement Container = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                     Container.RemoveFromClassList("activeCanvas");
                     Container.AddToClassList("inactiveCanvas");
                 }
@@ -442,14 +442,6 @@ namespace ADM.UISystem
             }
             if (UnityEngine.Application.isPlaying)
             {
-
-                if (PenButton.value)
-                {
-                    if (MenuManager.MouseInGameWindow)
-                    {
-                        ForceSetCursor(DrawCursor, new Vector2(6, DrawCursor.width - 5));
-                    }
-                }
 
 #if UNITY_EDITOR
 

@@ -1,4 +1,7 @@
 
+using System.Collections.Generic;
+using System.Drawing;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,15 +37,15 @@ public class CalloutManager : VisualElement
         Line = mgc.painter2D;
         //paint2D
 
-        paint2D.fillColor = new Color(255,255,255,255);
+        paint2D.fillColor = new UnityEngine.Color(255, 255, 255, 255);
         paint2D.lineJoin = LineJoin.Round;
         paint2D.lineCap = LineCap.Round;
         paint2D.lineWidth = 5.0f;
 
         paint2D.BeginPath();
 
-        Vector2 startPos = new Vector2(m_labelPoint.resolvedStyle.left, m_labelPoint.resolvedStyle.top);
-        //Vector2 startPos = new Vector2(m_labelPoint.transform.position.x, m_labelPoint.transform.position.y);
+        Vector2 startPos = new Vector2();
+     
 
 
 
@@ -53,17 +56,23 @@ public class CalloutManager : VisualElement
         {
             if(labelPoint != null)
             {
+         
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(labelPoint.transform.position);
                 float scale = projectManager.uI_Manager.uIDocument.panelSettings.scale;
                 Vector2 LinePos = new Vector2(screenPos.x / scale, ((Screen.height - screenPos.y) / scale));
 
                 m_labelPoint.style.left = LinePos.x;
                 m_labelPoint.style.top = LinePos.y;
+                
+            }
+            if(m_labelPoint != null)
+            {
+                startPos = new Vector2(m_labelPoint.resolvedStyle.left, m_labelPoint.resolvedStyle.top);
             }
 
-            paint2D.MoveTo(startPos);
 
-            
+
+            paint2D.MoveTo(startPos);
             /*if (projectManager.ActiveSection.TestLinePoint != null)
             {
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(labelPoint.transform.position);
@@ -160,7 +169,6 @@ public class CalloutManager : VisualElement
         if (projectManager == null)
         {
             projectManager = GameObject.FindAnyObjectByType<ProjectManager>();
-            projectManager.ActiveSection.testLineDrawer = this;
         }
         //Add a transform into the scene to point to 
         /*if (!Initialized)
@@ -191,10 +199,31 @@ public class CalloutManager : VisualElement
         generateVisualContent += OnGenerateVisualContent;
     }
 
+    public StyleColor LineColor { get; set; }
     public new class UxmlFactory : UxmlFactory<CalloutManager, UxmlTraits> { }
-    public new class UxmlTraits : VisualElement.UxmlTraits { }
+    public new class UxmlTraits : VisualElement.UxmlTraits
+    {
+        /*public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+        {
+            get { yield break; }
+        }
+        UxmlColorAttributeDescription lineColor =
+            new UxmlColorAttributeDescription { name = "Line Color") };
 
-    
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            Debug.Log("Init!!");
+            base.Init(ve, bag, cc);
+
+            var inputField = ve as CalloutManager;
+
+            inputField.LineColor = lineColor.GetValueFromBag(bag, cc);
+
+
+        }*/
+    }
+
+
     public void OnGeometryChange(GeometryChangedEvent evt)
     {
 

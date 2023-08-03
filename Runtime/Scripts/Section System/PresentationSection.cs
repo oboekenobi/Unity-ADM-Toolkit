@@ -11,6 +11,8 @@ using Cinemachine.PostFX;
 using UnityEngine.UIElements;
 using static ADM.UISystem.PopupManager;
 using TMPro;
+using System.Reflection;
+using UnityEngine.Rendering;
 
 [ExecuteInEditMode]
 public class PresentationSection : MonoBehaviour
@@ -21,6 +23,7 @@ public class PresentationSection : MonoBehaviour
     VisualElement m_lineDrawer;
     public List<CalloutManager> m_calloutManagerList = new List<CalloutManager>();
     public UIDocument CalloutCanvasDocument;
+    
 
     [HideInInspector]
     public ProjectManager manager;
@@ -153,6 +156,63 @@ public class PresentationSection : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    static MethodInfo setIconEnabled;
+    static MethodInfo SetIconEnabled => setIconEnabled = setIconEnabled ??
+    Assembly.GetAssembly(typeof(Editor))
+    ?.GetType("UnityEditor.AnnotationUtility")
+    ?.GetMethod("SetIconEnabled", BindingFlags.Static | BindingFlags.NonPublic);
+    public static void SetGizmoIconEnabled(Type type, bool on)
+    {
+        if (SetIconEnabled == null) return;
+        const int MONO_BEHAVIOR_CLASS_ID = 114; // https://docs.unity3d.com/Manual/ClassIDReference.html
+        SetIconEnabled.Invoke(null, new object[] { MONO_BEHAVIOR_CLASS_ID, type.Name, on ? 1 : 0 });
+    }
+
+    public float GizmoCameraScale;
+    private PivotGizmo pivotGizmo;
+    private void OnDrawGizmos()
+    {
+        if (pivotGizmo == null)
+        {
+            pivotGizmo = Pivot.gameObject.GetComponent<PivotGizmo>();
+        }
+        //SetGizmoIconEnabled(Camera ,false);
+        GizmoUtility.SetGizmoEnabled(typeof(Camera), false);
+        GizmoUtility.SetGizmoEnabled(typeof(CinemachineBrain), false);
+        Camera c = Camera.main;
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.position, this.transform.rotation, Vector3.one);
+        /*Gizmos.DrawFrustum(Vector3.zero, c.fieldOfView, 1, 0.5f, c.aspect);
+
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(0.5f,0.5f,1f));*/
+        //SceneView.lastActiveSceneView.drawGizmos = true;
+
+
+        float CameraSize = 0.2f;
+        Vector3 CameraSizeVector = new Vector3(CameraSize, CameraSize, CameraSize);
+        GizmoCameraScale = ProjectManager.GetGizmoSize(CameraSizeVector);
+
+        if (manager.ActiveSection == this)
+        {
+            Gizmos.color = Color.cyan;
+            pivotGizmo.selectedColor = Color.green;
+        }
+        else
+        {
+            pivotGizmo.selectedColor = Color.white;
+        }
+        GameObject MeshGO = Resources.Load<GameObject>("Gizmos/Camera Mesh");
+        Gizmos.DrawMesh(MeshGO.GetComponent<MeshFilter>().sharedMesh, 0, Vector3.zero, Quaternion.identity, CameraSizeVector * GizmoCameraScale);
+
+
+        
+    }
+
+
+
+    
+
+
+    
     private void OnValidate()
     {
    

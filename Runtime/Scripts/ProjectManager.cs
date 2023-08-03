@@ -275,23 +275,24 @@ public class ProjectManager : MonoBehaviour
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                if(ActiveSection != null)
+                if(ActiveSection == null)
                 {
-                    if (ActiveSection.TweenCameras.Count > 0)
+                    ActiveSection = Sections[0];
+                }
+                if (ActiveSection.TweenCameras.Count > 0)
+                {
+                    for (int j = 0; j < ActiveSection.TweenCameras.Count; j++)
                     {
-                        for (int j = 0; j < ActiveSection.TweenCameras.Count; j++)
-                        {
-                            ActiveSection.TweenCameras[j].gameObject.SetActive(false);
-                        }
+                        ActiveSection.TweenCameras[j].gameObject.SetActive(false);
                     }
-                    if(ActiveSection.CallOutPoints.Count > 0)
+                }
+                if (ActiveSection.CallOutPoints.Count > 0)
+                {
+                    foreach (GameObject point in ActiveSection.CallOutPoints)
                     {
-                        foreach(GameObject point in ActiveSection.CallOutPoints)
+                        if (point != null)
                         {
-                            if(point != null)
-                            {
-                                point.SetActive(false);
-                            }
+                            point.SetActive(false);
                         }
                     }
                 }
@@ -300,15 +301,19 @@ public class ProjectManager : MonoBehaviour
                 {
                     if (Sections[i].sectionCamera.VirtualCamera == VirtualCamera)
                     {
-                        VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
-                        Container.RemoveFromClassList("activeCanvas");
-                        Container.AddToClassList("inactiveCanvas");
-                        ActiveSection = Sections[i];
-                        VisualElement ActiveContainer = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
-                        ActiveContainer.RemoveFromClassList("inactiveCanvas");
-                        ActiveContainer.AddToClassList("activeCanvas");
-                        ActiveSection.sectionCamera.RayColor = ActiveSection.sectionCamera.SelectedRayColor;
-                        ActiveSectionIndex = ActiveSection.SectionID;
+                        if(ActiveSection != null)
+                        {
+                            VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+                            Container.RemoveFromClassList("activeCanvas");
+                            Container.AddToClassList("inactiveCanvas");
+                            ActiveSection = Sections[i];
+                            VisualElement ActiveContainer = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+                            ActiveContainer.RemoveFromClassList("inactiveCanvas");
+                            ActiveContainer.AddToClassList("activeCanvas");
+                            ActiveSection.sectionCamera.RayColor = ActiveSection.sectionCamera.SelectedRayColor;
+                            ActiveSectionIndex = ActiveSection.SectionID;
+                        }
+                        
                     }
 
                     if (Sections[i].sectionCamera.VirtualCamera != VirtualCamera)
@@ -340,10 +345,32 @@ public class ProjectManager : MonoBehaviour
                 }
 
             }
-#endif  
+
             CanSwitchEditorCamera = false;
         }
     }
+
+    public static float GetGizmoSize(Vector3 position)
+    {
+        Camera current = Camera.current;
+        position = Gizmos.matrix.MultiplyPoint(position);
+
+        if (current)
+        {
+            Transform transform = current.transform;
+            Vector3 position2 = transform.position;
+            float z = Vector3.Dot(position - position2, transform.TransformDirection(new Vector3(0f, 0f, 1f)));
+            Vector3 a = current.WorldToScreenPoint(position2 + transform.TransformDirection(new Vector3(0f, 0f, z)));
+            Vector3 b = current.WorldToScreenPoint(position2 + transform.TransformDirection(new Vector3(1f, 0f, z)));
+            float magnitude = (a - b).magnitude;
+            return 80f / Mathf.Max(magnitude, 0.0001f);
+        }
+
+        return 20f;
+    }
+
+
+#endif
 
     /*public void RenderVideoSequence()
     {

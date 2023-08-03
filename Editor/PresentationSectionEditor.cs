@@ -29,7 +29,7 @@ public class PresentationSectionEditor : Editor
     private void OnEnable()
     {
         //sceneGUI = new PresentationSectionSceneGUI();
-        SceneView.duringSceneGui += OnSceneGUI;
+        //SceneView.duringSceneGui += OnSceneGUI;
         //sceneGUI.SetTarget((PresentationSection)target);
         SetTarget((PresentationSection)target);
     }
@@ -40,14 +40,17 @@ public class PresentationSectionEditor : Editor
         {
             DestroyImmediate(sceneGUI);
         }*/
-        SceneView.duringSceneGui -= OnSceneGUI;
+        //SceneView.duringSceneGui -= OnSceneGUI;
     }
 
-    void OnSceneGUI(SceneView sceneView)
+    void OnSceneGUI()
     {
         if (!Application.isPlaying)
         {
             PresentationSection camera = targetSection;
+
+            
+
             if (camera == null)
             {
                 return;
@@ -134,7 +137,7 @@ public class PresentationSectionEditor : Editor
                 //Handles.color = Color.blue;
                 if (StaticManager.SceneCameras[i].VirtualCamera != null)
                 {
-                    Handles.Label(StaticManager.SceneCameras[i].CameraChild.transform.position + Vector3.up * 0.5f,
+                    Handles.Label(StaticManager.SceneCameras[i].CameraChild.transform.position + Vector3.up * (0.8f * StaticManager.ActiveSection.GizmoCameraScale),
                     StaticManager.SceneCameras[i].CameraChild.name, centeredTextStyle);
                 }
             }
