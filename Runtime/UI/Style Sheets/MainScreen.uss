@@ -587,3 +587,7 @@
     min-height: 40px;
     max-height: 40px;
 }
+
+.picking-cursor #unity-checkmark {
+    cursor: url('project://database/Packages/com.adm.adm-toolkit/Runtime/UI/Cursors/pan_tool_alt_FILL1_wght700_GRAD0_opsz48.png?fileID=2800000&guid=d24dbdc39fba4f640a57db5e3bd4750d&type=3#pan_tool_alt_FILL1_wght700_GRAD0_opsz48');
+}

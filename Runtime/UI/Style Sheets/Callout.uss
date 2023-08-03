@@ -1,19 +1,37 @@
-.callout-label {
+.callout-label #Text {
     scale: 1 1;
     border-left-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
     border-bottom-color: rgb(255, 255, 255);
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     transition-property: scale;
+    background-color: rgb(0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: normal;
+    -unity-font: url('project://database/Packages/com.adm.adm-toolkit/Runtime/Branding%20Resources/OpenSans_SemiCondensed-SemiBold.ttf?fileID=12800000&guid=065704f758852204bb6ce0c9468a6808&type=3#OpenSans_SemiCondensed-SemiBold');
+    -unity-font-definition: initial;
+    font-size: 30px;
 }
 
-.callout-label:hover {
+.callout-label #Text:hover {
     scale: 1.2 1.2;
     border-left-color: rgb(90, 201, 255);
     border-right-color: rgb(90, 201, 255);
@@ -55,4 +73,8 @@
     transition-duration: 0.4s, 0.2s;
     transition-delay: 0s, 0s;
     transition-timing-function: ease, ease-in-out;
+}
+
+.callout-label #Shadow {
+    opacity: 0.3;
 }

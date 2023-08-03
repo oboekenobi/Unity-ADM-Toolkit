@@ -132,15 +132,24 @@ public class PresentationSectionEditor : Editor
         }
         else
         {
-            for (int i = 0; i < StaticManager.SceneCameras.Count; i++)
+
+            foreach(PresentationSection section in StaticManager.Sections)
+            {
+                if(section != null)
+                {
+                    Handles.Label(section.transform.position + Vector3.up * (0.8f * section.GizmoCameraScale),
+                    section.transform.name, centeredTextStyle);
+                }
+            }
+            /*for (int i = 0; i < StaticManager.Sections.Count; i++)
             {
                 //Handles.color = Color.blue;
-                if (StaticManager.SceneCameras[i].VirtualCamera != null)
+                if (StaticManager.Sections[i].VirtualCamera != null)
                 {
                     Handles.Label(StaticManager.SceneCameras[i].CameraChild.transform.position + Vector3.up * (0.8f * StaticManager.ActiveSection.GizmoCameraScale),
                     StaticManager.SceneCameras[i].CameraChild.name, centeredTextStyle);
                 }
-            }
+            }*/
         }
     }
 

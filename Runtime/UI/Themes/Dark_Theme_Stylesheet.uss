@@ -1,9 +1,9 @@
 .PrimaryBase-color {
     background-color: rgb(39, 39, 39);
-    border-left-color: rgba(255, 255, 255, 0.27);
-    border-right-color: rgba(255, 255, 255, 0.27);
-    border-top-color: rgba(255, 255, 255, 0.27);
-    border-bottom-color: rgba(255, 255, 255, 0.27);
+    border-left-color: rgb(77, 77, 77);
+    border-right-color: rgb(77, 77, 77);
+    border-top-color: rgb(77, 77, 77);
+    border-bottom-color: rgb(77, 77, 77);
 }
 
 .SecondaryBase-color {

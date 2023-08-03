@@ -9,7 +9,7 @@ public class CalloutBinding : MonoBehaviour
 
     public string QueryName = "";
 
-    public ProjectManager projectManager;
+    private ProjectManager projectManager;
 
     private CalloutManager calloutContainer;
 
@@ -53,5 +53,15 @@ public class CalloutBinding : MonoBehaviour
             }
             
         }
+    }
+
+    public Color deselectedColor;
+    public Color selectedColor;
+    private void OnDrawGizmos()
+    {
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(0.15f, 0.15f, 0.15f));
+        Gizmos.color = selectedColor;
+        Gizmos.DrawSphere(Vector3.zero, ProjectManager.GetGizmoSize(new Vector3(0.1f, 0.1f, 0.1f)));
+
     }
 }

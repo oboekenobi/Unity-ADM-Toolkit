@@ -235,10 +235,6 @@ public class CalloutManager : VisualElement
         }
         //generateVisualContent += OnGenerateVisualContent;
 
-        if (Application.isPlaying)
-        {
-            projectManager.uI_Manager.m_gameWindow.RegisterCallback<PointerMoveEvent>(Mouse);
-        }
         //this.RegisterCallback<>
 
 

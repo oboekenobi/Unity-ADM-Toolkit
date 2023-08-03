@@ -260,7 +260,7 @@ public class ProjectManager : MonoBehaviour
                 }
             }
         }
-        if(CanSwitchEditorCamera)
+        if (CanSwitchEditorCamera)
         {
             VirtualCamera.Priority = 10;
             foreach (VirtualCameraObject cam in SceneCameras)
@@ -272,10 +272,11 @@ public class ProjectManager : MonoBehaviour
             }
 
 
+
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                if(ActiveSection == null)
+                if (ActiveSection == null)
                 {
                     ActiveSection = Sections[0];
                 }
@@ -301,7 +302,7 @@ public class ProjectManager : MonoBehaviour
                 {
                     if (Sections[i].sectionCamera.VirtualCamera == VirtualCamera)
                     {
-                        if(ActiveSection != null)
+                        if (ActiveSection != null)
                         {
                             VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                             Container.RemoveFromClassList("activeCanvas");
@@ -313,7 +314,7 @@ public class ProjectManager : MonoBehaviour
                             ActiveSection.sectionCamera.RayColor = ActiveSection.sectionCamera.SelectedRayColor;
                             ActiveSectionIndex = ActiveSection.SectionID;
                         }
-                        
+
                     }
 
                     if (Sections[i].sectionCamera.VirtualCamera != VirtualCamera)
@@ -327,9 +328,9 @@ public class ProjectManager : MonoBehaviour
                     UI_Manager uI_Manager = GameObject.FindWithTag("UIManager").GetComponent<UI_Manager>();
 
 
-                    if(ActiveSection.TweenCameras.Count > 0)
+                    if (ActiveSection.TweenCameras.Count > 0)
                     {
-                        for(int i =0 ; i < ActiveSection.TweenCameras.Count; i++)
+                        for (int i = 0; i < ActiveSection.TweenCameras.Count; i++)
                         {
                             ActiveSection.TweenCameras[i].gameObject.SetActive(true);
                         }
@@ -343,13 +344,14 @@ public class ProjectManager : MonoBehaviour
                         }
                     }
                 }
-
             }
 
             CanSwitchEditorCamera = false;
+#endif
         }
     }
 
+#if UNITY_EDITOR
     public static float GetGizmoSize(Vector3 position)
     {
         Camera current = Camera.current;
@@ -368,9 +370,9 @@ public class ProjectManager : MonoBehaviour
 
         return 20f;
     }
-
-
 #endif
+
+
 
     /*public void RenderVideoSequence()
     {

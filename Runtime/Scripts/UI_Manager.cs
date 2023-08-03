@@ -205,6 +205,7 @@ namespace ADM.UISystem
             
             
             root = uIDocument.rootVisualElement;
+            menuManager = root.Q<MenuManager>("RootLayout");
             ToolsManager = root.Q<TejadaToolsManager>(ToolsManagerQuery);
             m_welcomeWindow = root.Q<VisualElement>("WelcomeWindowLayout");
             m_windowBackground = root.Q<VisualElement>("WindowBackground");
@@ -455,6 +456,7 @@ namespace ADM.UISystem
                     {
                         Screen.SetResolution(PreviousScreenWidth, PreviousScreenHeight, false);
                         menuManager.m_FullScreenButton.value = false;
+                        menuManager.DisplayPopupWarning("Fullscreen disabled", 2f);
                         Screen.fullScreen = false;
                     }
                 }
@@ -1363,11 +1365,11 @@ namespace ADM.UISystem
                     compassActive = true;
                 }
 
-                else if(projectManager.ActiveSection.PopupWindowContent!= null)
+                if(PreviousPresentationSection.PopupWindowContent!= null)
                 {
                     m_popoutLayout.style.minWidth = StyleKeyword.Null;
                     m_popoutLayout.style.maxWidth = StyleKeyword.Null;
-                    if (popupManager.m_popoutToggle.value)
+                    if (popupManager.m_popoutToggle.value && targetSection.PopupWindowContent == null)
                     {
                         m_popoutLayout.AddToClassList("inactivePopoutWindow");
                         m_popoutLayout.RemoveFromClassList("activePopoutWindow");
@@ -1375,7 +1377,7 @@ namespace ADM.UISystem
                 }
 
 
-                VisualElement Container = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
+                VisualElement Container = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                 Container.RemoveFromClassList("activeCanvas");
                 Container.AddToClassList("inactiveCanvas");
                 if (PreviousPresentationSection.CallOutPoints.Count > 0)
@@ -1390,9 +1392,13 @@ namespace ADM.UISystem
                 projectManager.ActiveSection = targetSection;
                 ChangeTitle();
 
-                VisualElement ActiveContainer = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("CalloutContainer");
-                ActiveContainer.RemoveFromClassList("inactiveCanvas");
-                ActiveContainer.AddToClassList("activeCanvas");
+                if (!menuManager.m_LabelToggle.value)
+                {
+                    VisualElement ActiveContainer = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+                    ActiveContainer.RemoveFromClassList("inactiveCanvas");
+                    ActiveContainer.AddToClassList("activeCanvas");
+                }
+                
                 if(targetSection.CallOutPoints.Count > 0)
                 {
                     foreach(GameObject point in targetSection.CallOutPoints)

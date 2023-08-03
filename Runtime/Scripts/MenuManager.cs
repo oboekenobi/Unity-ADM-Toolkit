@@ -16,7 +16,7 @@ public class MenuManager : VisualElement
     Toggle m_PenTool;
     VisualElement m_InformationButton;
     Toggle m_ReferenceMenuToggle;
-    Toggle m_LabelToggle;
+    public Toggle m_LabelToggle;
     VisualElement m_helpWindowCloseButton;
     VisualElement m_SkipBack;
     VisualElement m_SkipForward;
@@ -55,7 +55,7 @@ public class MenuManager : VisualElement
     public MenuManager()
     {
         uI_Manager = UI_Manager.FindFirstObjectByType<UI_Manager>();
-        uI_Manager.menuManager = this;
+        //uI_Manager.menuManager = this;
         this.RegisterCallback<GeometryChangedEvent>(OnGeometryChange);
     }
 
@@ -287,16 +287,17 @@ public class MenuManager : VisualElement
         {
             if (Application.isPlaying)
             {
-                ProjectManager.CallOutCanvas.alpha = 0;
+                VisualElement Container = uI_Manager.projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+                Container.RemoveFromClassList("activeCanvas");
+                Container.AddToClassList("inactiveCanvas");
             }
             DisplayPopupWarning("Callouts disabled", 2);
         }
         else
         {
-            if (Application.isPlaying)
-            {
-                ProjectManager.CallOutCanvas.alpha = 1;
-            }
+            VisualElement Container = uI_Manager.projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+            Container.RemoveFromClassList("inactiveCanvas");
+            Container.AddToClassList("activeCanvas");
             DisplayPopupWarning("Callouts enabled", 2);
         }
     }
@@ -354,6 +355,7 @@ public class MenuManager : VisualElement
     {
         if (m_FullScreenButton.value)
         {
+            DisplayPopupWarning("Fullscreen enabled. Press Esc to exit", 3.5f);
             UI_Manager.PreviousScreenHeight = Screen.height;
             UI_Manager.PreviousScreenWidth = Screen.width;
             Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
@@ -362,6 +364,7 @@ public class MenuManager : VisualElement
         }
         else
         {
+            DisplayPopupWarning("Fullscreen disabled", 2f);
             Screen.SetResolution(UI_Manager.PreviousScreenWidth, UI_Manager.PreviousScreenHeight, false);
             Screen.fullScreen = false;
             UI_Manager.isFullScreen = false;
@@ -373,7 +376,7 @@ public class MenuManager : VisualElement
         if (m_PenTool.value)
         {
             m_laserPointerTexture.pickingMode = PickingMode.Ignore;
-
+            hasBeenClicked = false;
             m_PenTool.value = false;
             uI_Manager.drawManager.Clear();
             UI_Manager.DrawingMode = false;
