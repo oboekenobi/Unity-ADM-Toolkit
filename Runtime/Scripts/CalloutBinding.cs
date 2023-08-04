@@ -57,6 +57,7 @@ public class CalloutBinding : MonoBehaviour
 
     public Color deselectedColor;
     public Color selectedColor;
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, new Vector3(0.15f, 0.15f, 0.15f));
@@ -64,4 +65,5 @@ public class CalloutBinding : MonoBehaviour
         Gizmos.DrawSphere(Vector3.zero, ProjectManager.GetGizmoSize(new Vector3(0.1f, 0.1f, 0.1f)));
 
     }
+#endif
 }
