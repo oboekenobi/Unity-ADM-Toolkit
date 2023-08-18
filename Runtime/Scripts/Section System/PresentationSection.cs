@@ -44,6 +44,8 @@ public class PresentationSection : MonoBehaviour
     public CinemachineVirtualCamera PreviousCamera;
     public CinemachineVirtualCamera VirtualCamera;
     public CinemachineVolumeSettings VolumeSettings;
+
+    public int MouseSensitivityMultiplier = 1;
     public float LabelEditorValue;
     public float ZoomSpeedOffset = 0;
     [Tooltip("Include a pop up for Images")]
@@ -66,7 +68,13 @@ public class PresentationSection : MonoBehaviour
         ReplaceControls, AddControls
     }
 
+    public enum CameraManipulator
+    {
+        Tethered, POV, Static
+    }
+
     public ControlPanleOverrideType OverrideType = ControlPanleOverrideType.ReplaceControls;
+    public CameraManipulator CameraManipulatorType = CameraManipulator.Tethered;
     public ControlPanel ControlPanelOverride;
     public List<VisualElement> GeneratedControls = new List<VisualElement>();
 

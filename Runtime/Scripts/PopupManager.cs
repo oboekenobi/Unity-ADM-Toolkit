@@ -1,10 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine.Timeline;
 
 namespace ADM.UISystem
 {
@@ -141,7 +138,10 @@ namespace ADM.UISystem
                 uI_Manager.m_popoutLayout.AddToClassList("activePopoutWindow");
                 uI_Manager.m_popoutLayout.RemoveFromClassList("inactivePopoutWindow");
 
+                lastWindowPosition = this.transform.position;
                 uI_Manager.popupManager.transform.position = Vector3.zero;
+                //ZeroOutPopup();
+
                 uI_Manager.popupManager.RemoveManipulator(uI_Manager.popupManipulator);
             }
             else
@@ -152,7 +152,7 @@ namespace ADM.UISystem
                 uI_Manager.popupManager.transform.position = uI_Manager.popupManipulator.lastPosition;
                 uI_Manager.popupManager.style.maxHeight = uI_Manager.popupManipulator.lastElementSize.x;
                 uI_Manager.popupManager.style.maxWidth = uI_Manager.popupManipulator.lastElementSize.y;
-  
+                
                 uI_Manager.m_popoutLayout.style.minWidth = StyleKeyword.Null;
                 uI_Manager.m_popupLayout.Add(uI_Manager.m_popupWindowContainer);
                 uI_Manager.m_popoutLayout.AddToClassList("inactivePopoutWindow");
@@ -160,6 +160,8 @@ namespace ADM.UISystem
                 this.AddToClassList("minimizedPopup");
                 this.RemoveFromClassList("maximizedPopup");
                 uI_Manager.popupManager.AddManipulator(uI_Manager.popupManipulator);
+
+                uI_Manager.popupManager.transform.position = lastWindowPosition;
             }
         }
         Vector3 lastWindowPosition;
@@ -201,6 +203,7 @@ namespace ADM.UISystem
                     uI_Manager.popupManager.style.maxHeight = StyleKeyword.Null;
                     uI_Manager.popupManager.style.maxWidth = StyleKeyword.Null;
                     this.RemoveFromClassList("minimizedPopup");
+                    
                     this.AddToClassList("maximizedPopup");
                     Debug.Log("popup attempted to go fullscreen");
                 }
@@ -321,6 +324,44 @@ namespace ADM.UISystem
             m_counter.text = (currentContentIndex + 1) + "/" + (generatedContents[0].ChildContent.Count);
         }
 
+        private Vector3 flippedDirection;
+        public void ZeroOutPopup()
+        {
+            /*if (parent.resolvedStyle.flexDirection == FlexDirection.ColumnReverse)
+            {
+
+                //'Vector3 flippedDirection = new Vector3();
+
+                if(transform.position != flippedDirection)
+                {
+                    flippedDirection = new Vector3(parent.worldBound.width - worldBound.width, worldBound.height - parent.worldBound.height, 0);
+                    transform.position = flippedDirection;
+                }
+                
+                Debug.Log(new Vector2(parent.worldBound.width, transform.position.x));
+                Debug.Log("Column reverse Zeroed");
+            }
+            if (parent.resolvedStyle.flexDirection == FlexDirection.RowReverse)
+            {
+                transform.position = Vector3.zero;
+                Debug.Log("Row Reverse Zeroed");
+            }
+            if (parent.resolvedStyle.flexDirection == FlexDirection.Column || parent.resolvedStyle.flexDirection == FlexDirection.Row)
+            {
+
+                if (transform.position != flippedDirection)
+                {
+                    flippedDirection = new Vector3((parent.worldBound.width - worldBound.width), 0, 0);
+                    transform.position = flippedDirection;
+                }
+                Debug.Log("Row and Column zeroed");
+            }*/
+
+            parent.style.flexDirection = FlexDirection.RowReverse;
+            transform.position = Vector3.zero;
+
+            Debug.Log("Zeroed popup");
+        }
 
 
 

@@ -65,11 +65,21 @@ public class PresentationSectionEditor : Editor
             {
                 manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
                 manager.CanSwitchEditorCamera = true;
-                manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
+                /*if (manager.ActiveSection != targetSection)
+                {
+                   
+                    manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
+                }*/
             }
-            if (manager.ActiveSection != manager.LastActiveSection)
+            if (manager.ActiveSection != targetSection)
             {
+                manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
+                manager.CanSwitchEditorCamera = true;
+
+                manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
+  
                 manager.inputManager.SetDefaultCinemachineCamera();
+
 
                 //manager.ActiveSection.director.time = manager.ActiveSection.director.duration;
                 manager.ActiveSection.director.time = 0;
@@ -100,7 +110,7 @@ public class PresentationSectionEditor : Editor
         //creates foldout menu of the entire default way the script is displayed in the inspector, minus the already composed propertyfield
         var foldout = new Foldout() { viewDataKey = "PresentationSectionEditor" };
         InspectorElement.FillDefaultInspector(foldout, serializedObject, this);
-        root.Add(foldout);
+        //root.Add(foldout);
 
         return root;
     }

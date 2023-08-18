@@ -1283,6 +1283,12 @@ namespace ADM.UISystem
                 PreviousPresentationSection = projectManager.ActiveSection;
                 ExhibitCounter.text = (targetSection.SectionID + 1).ToString() + ".";
                 
+                if(PreviousPresentationSection.CameraManipulatorType == PresentationSection.CameraManipulator.POV)
+                {
+                    InputManager.MainCamera.transform.localEulerAngles = Vector3.zero;
+
+                    cam.MainCameraTransform.transform.localEulerAngles = Vector3.zero;
+                }
 
                 if (UI_Manager.DrawingMode)
                 {
@@ -1316,10 +1322,10 @@ namespace ADM.UISystem
                 }
 
 
-                if(targetSection.PopupWindowContent != null)
+                if (targetSection.PopupWindowContent != null)
                 {
                     InitializePopup(targetSection);
-                    if(projectManager.ActiveSection.PopupWindowContent == null)
+                    if (targetSection.PopupWindowContent == null)
                     {
                         if (popupManager.m_popoutToggle.value)
                         {
@@ -1331,7 +1337,20 @@ namespace ADM.UISystem
 
                     if (PreviousPresentationSection.PopupWindowContent == null)
                     {
-                        popupManager.transform.position = Vector3.zero;
+                        /*if (popupManipulator.Parent.style.flexDirection == FlexDirection.ColumnReverse)
+                        {
+                            popupManager.transform.position = new Vector3((popupManipulator.Parent.worldBound.width - popupManager.transform.position.x), (popupManipulator.Parent.worldBound.height - popupManager.transform.position.y), 0);
+                        }
+                        if (popupManipulator.Parent.style.flexDirection == FlexDirection.RowReverse)
+                        {
+                            popupManager.transform.position = Vector3.zero;
+                        }
+                        if (popupManipulator.Parent.style.flexDirection == FlexDirection.Column || popupManipulator.Parent.style.flexDirection == FlexDirection.Row)
+                        {
+                            popupManager.transform.position = new Vector3((popupManipulator.Parent.worldBound.width - popupManager.transform.position.x), 0, 0);
+                        }*/
+                        popupManager.ZeroOutPopup();
+
                         popupManager.OpenPopup();
                         InputManager.PopupOpen = true;
                     }
@@ -1500,6 +1519,7 @@ namespace ADM.UISystem
             TitleDimensions = SectionTitle.MeasureTextSize(SectionTitle.text, 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined); ;
             SectionTitle.style.minWidth = TitleDimensions.x + 40;
         }
+
         #endregion
 
         #region Initializer Functions

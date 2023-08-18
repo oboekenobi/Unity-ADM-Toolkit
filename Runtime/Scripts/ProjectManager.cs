@@ -89,27 +89,45 @@ public class ProjectManager : MonoBehaviour
 #if UNITY_EDITOR
     private void OnEnable()
     {
-/*        if (!Application.isPlaying)
-        {
-            toolkitManager = GameObject.FindFirstObjectByType<ADMToolkitManager>();
-            if (inputManager == null)
-            {
-                inputManager = GameObject.FindFirstObjectByType<InputManager>();
-            }
-            else if (inputManager.projectManager == null)
-            {
-                inputManager.projectManager = this;
-            }
+        /*        if (!Application.isPlaying)
+                {
+                    toolkitManager = GameObject.FindFirstObjectByType<ADMToolkitManager>();
+                    if (inputManager == null)
+                    {
+                        inputManager = GameObject.FindFirstObjectByType<InputManager>();
+                    }
+                    else if (inputManager.projectManager == null)
+                    {
+                        inputManager.projectManager = this;
+                    }
 
-            if (uI_Manager == null)
+                    if (uI_Manager == null)
+                    {
+                        uI_Manager = GameObject.FindFirstObjectByType<UI_Manager>();
+                    }
+                    else if (uI_Manager.projectManager == null)
+                    {
+                        uI_Manager.projectManager = this;
+                    }
+                }*/
+
+
+        //Ensure that only the active section labels are visible when the scene is reloaded
+        VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+        Container.RemoveFromClassList("inactiveCanvas");
+        Container.AddToClassList("activeCanvas");
+
+        foreach(PresentationSection section in Sections)
+        {
+            if(section != ActiveSection)
             {
-                uI_Manager = GameObject.FindFirstObjectByType<UI_Manager>();
+                VisualElement ActiveContainer = section.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
+                ActiveContainer.RemoveFromClassList("activeCanvas");
+                ActiveContainer.AddToClassList("inactiveCanvas");
             }
-            else if (uI_Manager.projectManager == null)
-            {
-                uI_Manager.projectManager = this;
-            }
-        }*/
+        }
+
+        ChangeTitleInEditorMode();
     }
 #endif
 
@@ -307,12 +325,18 @@ public class ProjectManager : MonoBehaviour
                             VisualElement Container = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                             Container.RemoveFromClassList("activeCanvas");
                             Container.AddToClassList("inactiveCanvas");
+                            //ActiveSection.CalloutCanvasDocument.enabled = false;
                             ActiveSection = Sections[i];
                             VisualElement ActiveContainer = ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                             ActiveContainer.RemoveFromClassList("inactiveCanvas");
                             ActiveContainer.AddToClassList("activeCanvas");
+                            //ActiveSection.CalloutCanvasDocument.enabled = true;
+                            Debug.Log("Callouts switched");
                             ActiveSection.sectionCamera.RayColor = ActiveSection.sectionCamera.SelectedRayColor;
                             ActiveSectionIndex = ActiveSection.SectionID;
+
+                            //Change the title in Edit mode
+                            ChangeTitleInEditorMode();
                         }
 
                     }
@@ -369,6 +393,17 @@ public class ProjectManager : MonoBehaviour
         }
 
         return 20f;
+    }
+
+    public void ChangeTitleInEditorMode()
+    {
+        if (ActiveSection.SectionTitle != null)
+        {
+            Label sectionTitle = uI_Manager.uIDocument.rootVisualElement.Q<Label>("Title");
+            sectionTitle.text = ActiveSection.SectionTitle;
+            Vector2 TitleDimensions = sectionTitle.MeasureTextSize(sectionTitle.text, 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined); ;
+            sectionTitle.style.minWidth = TitleDimensions.x + 40;
+        }
     }
 #endif
 

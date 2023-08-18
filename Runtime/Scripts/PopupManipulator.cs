@@ -131,7 +131,7 @@ using ADM.UISystem;
 public class PopupManipulator : IManipulator {
 
     private VisualElement _target;
-    private VisualElement Parent;
+    public VisualElement Parent;
     private UIDocument uI_Document;
     
     //Seperate class to manage the cursor modes since Runtime UI Toolkit does not support default cursors
@@ -245,9 +245,14 @@ public class PopupManipulator : IManipulator {
         // Capture the mouse to track its movement
         target.CaptureMouse();
 
+        //Get the initial sizes of the Visual Elements incase the style changes while the target is being dragged
+        initialTargetHeight = target.worldBound.height;
+        initialTargetWidth = target.worldBound.width;
+
         //Initialize the ResizeManipulator if the mouse is detected on the corners
         if (resizeLeft || resizeRight || resizeTop || resizeBottom || resizeBottomLeftCorner || resizeBottomRightCorner || resizeTopLeftCorner || resizeTopRightCorner)
         {
+            InitalPositionX = (target.transform.position.x + target.worldBound.width);
             InitializeResizeManipulator(ev.position);
         }
 
@@ -267,15 +272,13 @@ public class PopupManipulator : IManipulator {
                 target.RemoveFromClassList(removeClassOnDrag);
         }
 
-        //Get the initial sizes of the Visual Elements incase the style changes while the target is being dragged
-        initialTargetHeight = target.worldBound.height;
-        initialTargetWidth = target.worldBound.width;
+        
 
         UI_Manager.RestrictMovement = true;
 
         target.style.opacity = 0.6f;
         
-        target.style.scale = new Vector2(0.98f, 0.98f);
+        //target.style.scale = new Vector2(0.98f, 0.98f);
 
         lastScreenSize = ResolvedScreenSize();
 
@@ -309,6 +312,7 @@ public class PopupManipulator : IManipulator {
 
         if (!isDragging)
         {
+  
             return;
         }
         UI_Manager.RestrictMovement = false;
@@ -419,8 +423,10 @@ public class PopupManipulator : IManipulator {
         var gameWindowRect = Parent.worldBound;
         var targetRect = target.worldBound;
 
-        maxX = gameWindowRect.xMax - targetRect.width * offset;
-        maxY = gameWindowRect.yMax - targetRect.height * offset;
+        Vector2 sizeOffset = gameWindowRect.size - ResolvedScreenSize();
+
+        maxX = gameWindowRect.xMax;
+        maxY = gameWindowRect.yMax;
 
         Vector3 localSpacePosition = new Vector3();
 
@@ -440,11 +446,10 @@ public class PopupManipulator : IManipulator {
 
             finalPosition = localSpacePosition - Offset;
 
-
-            maxX = gameWindowRect.xMax - targetRect.width * offset;
-            maxY = gameWindowRect.yMax - targetRect.height * offset;
-            minY = gameWindowRect.yMin - targetRect.height * (1 - offset);
-            minX = gameWindowRect.xMin - targetRect.width * (1 - offset);
+            maxX = (gameWindowRect.xMax - target.worldBound.width) + sizeOffset.x;
+            maxY = gameWindowRect.yMax - target.worldBound.height;
+            minY = gameWindowRect.yMin - sizeOffset.y;
+            minX = gameWindowRect.xMin + sizeOffset.x;
 
             // Adjusting the position so that the top edge of the targetRect cannot go past the top edge of the gameWindowRect
             finalPosition.y = Mathf.Clamp(finalPosition.y, minY, maxY);
@@ -461,12 +466,16 @@ public class PopupManipulator : IManipulator {
             Vector3 flippedOffset = (new Vector3(initialTargetWidth, initialTargetHeight) - Offset);
             finalPosition = (localSpacePosition + new Vector3(flippedOffset.x - initialTargetWidth, flippedOffset.y, 0));
 
-            float screenHeight = ResolvedScreenSize().y - gameWindowRect.height;
+            float intervtedY = ResolvedScreenSize().y - gameWindowRect.yMax;
+            float invertY = ResolvedScreenSize().x - gameWindowRect.yMin;
 
-            maxX = gameWindowRect.xMax - targetRect.width * offset;
-            maxY = screenHeight - (gameWindowRect.yMax - targetRect.height * offset);
-            minY = gameWindowRect.yMin + targetRect.height * (1- offset);
-            minX = gameWindowRect.xMin - targetRect.width * (1 - offset);
+
+            maxX = (gameWindowRect.xMax - target.worldBound.width) + sizeOffset.x;
+            maxY = -gameWindowRect.yMax + +target.worldBound.height;
+            minY = intervtedY;
+            minX = gameWindowRect.xMin + sizeOffset.x;
+
+            
 
             // Adjusting the position so that the top edge of the targetRect cannot go past the top edge of the gameWindowRect
             finalPosition.y = Mathf.Clamp(finalPosition.y, maxY, minY);
@@ -483,11 +492,11 @@ public class PopupManipulator : IManipulator {
 
             float screenWidth = ResolvedScreenSize().x - gameWindowRect.width;
 
-            maxX = (screenWidth - (gameWindowRect.xMax - targetRect.width * offset));
-            maxY = gameWindowRect.yMax - targetRect.height * offset;
-            minY = gameWindowRect.yMin - targetRect.height * (1 - offset);
-            minX = gameWindowRect.xMin + targetRect.width * (1 - offset);
-
+            maxX = -gameWindowRect.xMax + (target.worldBound.width - sizeOffset.x);
+            maxY = gameWindowRect.yMax - target.worldBound.height;
+            minY = gameWindowRect.yMin - sizeOffset.y;
+            minX = gameWindowRect.xMin + sizeOffset.x;
+            Debug.Log(target.transform.position);
             // Adjusting the position so that the top edge of the targetRect cannot go past the top edge of the gameWindowRect
             finalPosition.y = Mathf.Clamp(finalPosition.y, minY, maxY);
 
@@ -513,7 +522,6 @@ public class PopupManipulator : IManipulator {
         //ParentSizeOffset = new Vector3((Screen.width / uI_Document.panelSettings.scale) - Parent.worldBound.width, (Screen.height / uI_Document.panelSettings.scale) - Parent.worldBound.height, 0);
         ResizeManipulator(ev.position);
         CalculateResizingBounds();
-
 
         Vector3 delta = new Vector3();
 
@@ -685,7 +693,7 @@ public class PopupManipulator : IManipulator {
                                     flippedDirectionY = true;*/
             }
 
-
+            
 
             Parent.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.ColumnReverse);
         }
@@ -712,28 +720,33 @@ public class PopupManipulator : IManipulator {
             float FlippedXDirection = parentWidth - (targetWidth + -(target.transform.position.x));
 
             Vector3 FlippedValue = new Vector3(FlippedXDirection, targetTransform.y, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+            Debug.Log(parentWidth);
+            Debug.Log(target.transform.position);
         }
 
         if (NegativeDirectionY)
         {
             float FlippedYDirection = -(parentHeight - (target.transform.position.y + targetHeight)); 
             Vector3 FlippedValue = new Vector3(targetTransform.x, FlippedYDirection, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+            Debug.Log("Negative Y");
         }
 
         if (NegativeDirectionX)
         {
             float FlippedXDirection = -(parentWidth - (targetWidth + (target.transform.position.x)));
             Vector3 FlippedValue = new Vector3(FlippedXDirection, target.transform.position.y, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+            Debug.Log("Negative X");
         }
 
         if (PositiveDirectionY)
         {
             float FlippedYDirection = (parentHeight - (-(target.transform.position.y) + (targetHeight)));
             Vector3 FlippedValue = new Vector3(target.transform.position.x, FlippedYDirection, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+            Debug.Log("Positive Y");
         }
 
         if (flippedDirectionX)
@@ -741,18 +754,23 @@ public class PopupManipulator : IManipulator {
             float FlippedXDirection = (target.transform.position.x) + (parentWidth - targetWidth);
 
             Vector3 FlippedValue = new Vector3(FlippedXDirection, targetTransform.y, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+
+            Debug.Log("Flipped X");
         }
 
         if (flippedDirectionY)
         {
             float FlippedYDirection = (((target.transform.position.y))) - (parentHeight - targetHeight);
             Vector3 FlippedValue = new Vector3(target.transform.position.x, FlippedYDirection, 0);
-            target.transform.position = (FlippedValue) * uI_Document.panelSettings.scale;
+            target.transform.position = (FlippedValue);
+
+            Debug.Log("Flipped Y");
         }
 
         PreviousFlexDirection = Parent.resolvedStyle.flexDirection;
         #endregion
+        InitalPositionX = target.transform.position.x;
 
         isResizing = true;
     }
@@ -782,7 +800,7 @@ public class PopupManipulator : IManipulator {
             bottomRighCornerCanResize = false;*/
             //PopupCanResize = false;
             isResizing = false;
-            Debug.Log("Mouse up");
+            //Debug.Log("Mouse up");
         }
     }
 
@@ -893,7 +911,7 @@ public class PopupManipulator : IManipulator {
         float clampedYMin = (Parent.worldBound.yMin) - Mathf.Clamp(target.worldBound.yMax - Parent.worldBound.yMax, 0, target.worldBound.yMax - Parent.worldBound.yMax);
 
         Vector2 clampedMousePosition = new Vector2(Mathf.Clamp(mousePosition.x, Parent.worldBound.xMin, Parent.worldBound.xMax), Mathf.Clamp(mousePosition.y, Parent.worldBound.yMin, Parent.worldBound.yMax));
-        Debug.Log(new Vector2(clampedXMin, clampedXMax));
+        //Debug.Log(new Vector2(clampedXMin, clampedXMax));
 
         Vector2 flippedPosition = new Vector2((lastScreenSize.x - clampedMousePosition.x), (lastScreenSize.y - clampedMousePosition.y));
 
@@ -902,7 +920,7 @@ public class PopupManipulator : IManipulator {
 
         if (resizeLeft)
         {
-            Debug.Log("Mouse detected on the left");
+            //Debug.Log("Mouse detected on the left");
 
             uI_Manager.SetHorizontalResizeCursor();
 
@@ -995,8 +1013,9 @@ public class PopupManipulator : IManipulator {
         }
     }
 
-    float leftSize;
+    float InitalPositionX;
     float leftPixels;
+    bool canMeasure_XMax;
     private void HandleResizeLeft(Vector2 delta)
     {
         // Update the element's width in the style
@@ -1004,7 +1023,14 @@ public class PopupManipulator : IManipulator {
         if (lengthUnit == LengthUnit.Percent)
         {
             float newWidth = (delta.x - offset) / Parent.worldBound.width * 100;
-            leftSize = (delta.x - offset);
+
+            if (canMeasure_XMax)
+            {
+                
+                
+                canMeasure_XMax = false;
+            }
+
             newWidth = Mathf.Clamp(newWidth, 10f, 200f);
 
             target.style.minWidth = new Length(newWidth, LengthUnit.Percent);
@@ -1055,7 +1081,6 @@ public class PopupManipulator : IManipulator {
             float  newWidth = (((delta.y - offset) / Parent.worldBound.height * 100));
 
 
-            Debug.Log(delta.y);
             newWidth = Mathf.Clamp(newWidth, 10f, 200f);
 
             target.style.minHeight = new Length(newWidth, LengthUnit.Percent);
@@ -1097,7 +1122,10 @@ public class PopupManipulator : IManipulator {
     //This handler will be cheated a bit since there is currently no flex direction that handles both left and top flexing
     private void HandleResizeTopLeftCorner(Vector2 delta)
     {
-        Vector3 flippedOffset = new Vector3(Parent.worldBound.width - (leftSize), target.transform.position.y, target.transform.position.z);
+        //Vector3 flippedOffset = new Vector3((leftSize), target.transform.position.y, target.transform.position.z);
+
+        Vector3 flippedOffset = new Vector3(InitalPositionX - (target.worldBound.width - initialTargetWidth), target.transform.position.y, target.transform.position.z);
+
         target.transform.position = flippedOffset;
         HandleResizeTop(delta);
         HandleResizeLeft(delta);

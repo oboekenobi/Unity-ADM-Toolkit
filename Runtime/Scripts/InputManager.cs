@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
 
 namespace ADM.UISystem
 {
@@ -72,6 +73,8 @@ namespace ADM.UISystem
         [Range(0.1f, 8f)]
         [Tooltip("How sensitive the mouse drag to camera rotation")]
         public float mouseRotateSpeed = 0.8f;
+
+        public float POVRotateSpeed = 0.4f;
         [Range(0.01f, 100)]
         [Tooltip("How sensitive the touch drag to camera rotation")]
         public float touchRotateSpeed = 17.5f;
@@ -469,6 +472,10 @@ namespace ADM.UISystem
             }
                 
         }
+
+        float cameraVerticalRotation = 0;
+        public float mouseSensitivity = 2f;
+
         public void CameraRotation(InputAction.CallbackContext context)
         {
             Vector2 delta = context.ReadValue<Vector2>();
@@ -478,6 +485,8 @@ namespace ADM.UISystem
                 #region Logic
                 //Indicate the camera has started rotating so that it does not cut out when exiting the gamewindow until the mouse is released.
 
+                
+
                 if (brain.ActiveBlend != null)
                 {
                     CurrentBlend = brain.ActiveBlend.TimeInBlend;
@@ -486,69 +495,94 @@ namespace ADM.UISystem
                 CameraRotating = true;
                 CameraRotated = true;
 
-                MainCameraTransform.LookAt(CachedPivotPosition);
 
                 #endregion
 
                 #region Input Logic
-                //This portion controls the camera movement INPUTS
-                if (!isTransitioning)
-                {
-                    if (!PivotShifting)
-                    {
-                        if (slerpedValue == 1)
-                        {
-                            slerpedValue = slerpValue;
-                        }
-                        if (!UI_Manager.RestrictMovement && !DICOMSliderInput.wasSliding)
-                        {
-                            rotX += -delta.y * mouseRotateSpeed;
-                            rotY += delta.x * mouseRotateSpeed;
-                        }
-                    }
-                    else
-                    {
-                        //MainCameraTransform.localPosition.x += delta.x;
-                    }
-                }
-                if (DICOMSliderInput.wasSliding)
-                {
-                    DICOMSliderInput.wasSliding = false;
-                }
 
-                if (isTransitioning)
+                if (uI_Manager.TimelineActive && projectManager.ActiveSection.hideTimeline || !uI_Manager.TimelineActive)
                 {
-                    if (CurrentBlend >= 0.99f)
+                    if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.Tethered)
                     {
-                        canStopTransition = true;
-                    }
+                        MainCameraTransform.LookAt(CachedPivotPosition);
 
-                    if (CurrentBlend >= 0.99f && canStopTransition && projectManager.ActiveSection.director.time != 0 && !UI_Manager.isScrubbing && !CameraRotated)
-                    {
-                        target = projectManager.ActiveSection.sectionCamera.PivotAngle;
-                        ScrollWheel = 0;
-                        ScrollWheelChange = 0;
-                        if (uI_Manager.PreviousPresentationSection != null)
+                        if (!isTransitioning)
                         {
-                            ResetPreviousCamera(uI_Manager.PreviousPresentationSection.sectionCamera.VirtualCamera);
+                            if (!PivotShifting)
+                            {
+                                if (slerpedValue == 1)
+                                {
+                                    slerpedValue = slerpValue;
+                                }
+                                if (!UI_Manager.RestrictMovement && !DICOMSliderInput.wasSliding)
+                                {
+                                    rotX += -delta.y * mouseRotateSpeed;
+                                    rotY += delta.x * mouseRotateSpeed;
+                                }
+                            }
+                            else
+                            {
+                                //MainCameraTransform.localPosition.x += delta.x;
+                            }
                         }
 
-                        isTransitioning = false;
-                        canStopTransition = false;
+                        if (DICOMSliderInput.wasSliding)
+                        {
+                            DICOMSliderInput.wasSliding = false;
+                        }
+
+                        if (isTransitioning)
+                        {
+                            if (CurrentBlend >= 0.99f)
+                            {
+                                canStopTransition = true;
+                            }
+
+                            if (CurrentBlend >= 0.99f && canStopTransition && projectManager.ActiveSection.director.time != 0 && !UI_Manager.isScrubbing && !CameraRotated)
+                            {
+                                target = projectManager.ActiveSection.sectionCamera.PivotAngle;
+                                ScrollWheel = 0;
+                                ScrollWheelChange = 0;
+                                if (uI_Manager.PreviousPresentationSection != null)
+                                {
+                                    ResetPreviousCamera(uI_Manager.PreviousPresentationSection.sectionCamera.VirtualCamera);
+                                }
+
+                                isTransitioning = false;
+                                canStopTransition = false;
+                            }
+
+
+                        }
+
+                        if (rotX < minXRotAngle)
+                        {
+                            rotX = minXRotAngle;
+                        }
+
+                        else if (rotX > maxXRotAngle)
+                        {
+                            rotX = maxXRotAngle;
+                        }
+
                     }
 
+                    if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.POV)
+                    {
+                        Debug.Log("POV Camera Rotating");
 
+                        Vector2 multipliedDelta = (delta * POVRotateSpeed) * projectManager.ActiveSection.MouseSensitivityMultiplier;
+
+                        cameraVerticalRotation -= multipliedDelta.y;
+                        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
+                        MainCamera.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
+                        
+                        MainCameraTransform.transform.Rotate(Vector3.up * multipliedDelta.x);
+
+                    }
                 }
 
-
-                if (rotX < minXRotAngle)
-                {
-                    rotX = minXRotAngle;
-                }
-                else if (rotX > maxXRotAngle)
-                {
-                    rotX = maxXRotAngle;
-                }
+        
                 #endregion
             }
         }
@@ -631,7 +665,7 @@ namespace ADM.UISystem
 
 
             //Updated Camera Logic
-            if (!isTransitioning && !UI_Manager.RestrictMovement)
+            if (!isTransitioning && !UI_Manager.RestrictMovement && projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.Tethered)
             {
                 ScrollWheelChange = Mathf.Lerp(ScrollWheelChange, ScrollWheel * (ZoomSpeed + projectManager.ActiveSection.ZoomSpeedOffset), slerpedValue);
                 cameraDistance = -CachedDistance;
@@ -657,6 +691,7 @@ namespace ADM.UISystem
 
             if (isTransitioning)
             {
+
                 //MainCameraTransform.transform.position = transform.position;
                 //MainCameraTransform.eulerAngles = transform.eulerAngles;
             }
