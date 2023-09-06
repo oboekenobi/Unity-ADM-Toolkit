@@ -21,7 +21,7 @@ public class PresentationSection : MonoBehaviour
     public CalloutManager line;
     public CalloutManager testLineDrawer;
     VisualElement m_lineDrawer;
-    public List<CalloutManager> m_calloutManagerList = new List<CalloutManager>();
+    
     public UIDocument CalloutCanvasDocument;
     
 
@@ -44,6 +44,7 @@ public class PresentationSection : MonoBehaviour
     public CinemachineVirtualCamera PreviousCamera;
     public CinemachineVirtualCamera VirtualCamera;
     public CinemachineVolumeSettings VolumeSettings;
+    public CanvasGroup WorldCallouts;
 
     public int MouseSensitivityMultiplier = 1;
     public float LabelEditorValue;
@@ -53,14 +54,12 @@ public class PresentationSection : MonoBehaviour
     public ADMUIMenuBinding CustomMenu;
 
     public VisualElement GeneratedPopup;
-    public string ToolsQuery;
 
     public List<GameObject> ToggleObjects;
-
-
-    public GameObject Markers;
     public List<MarkerScript> SectionMarkers = new List<MarkerScript>();
-    private VisualElement PopupWindow{ get; set; }
+    public List<CalloutBinding> CalloutBindings = new List<CalloutBinding>();
+    [Tooltip ("Include the names of visual elements in the root UI Document to reveal once this section is active")]
+    public List<String> VisualElementsToShow = new List<String>();
 
     [SerializeField]
     public enum ControlPanleOverrideType
@@ -74,6 +73,7 @@ public class PresentationSection : MonoBehaviour
     }
 
     public ControlPanleOverrideType OverrideType = ControlPanleOverrideType.ReplaceControls;
+    public PlayableDirector TimelineOverride;
     public CameraManipulator CameraManipulatorType = CameraManipulator.Tethered;
     public ControlPanel ControlPanelOverride;
     public List<VisualElement> GeneratedControls = new List<VisualElement>();
@@ -126,41 +126,11 @@ public class PresentationSection : MonoBehaviour
                 uI_Manager.GenerateControls(ControlPanelOverride, this);
             }
         }
-
-        /*m_lineDrawer = uI_Manager.root.Q<VisualElement>("LineDrawer");
-
-        m_lineDrawer.generateVisualContent += testLineDrawer.OnGenerateVisualContent;*/
     }
 
     public void Update()
     {
-        /*if(testLineDrawer!= null)
-        {
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(TestLinePoint.position);
-            float scale = uI_Manager.uIDocument.panelSettings.scale;
-            Vector2 LinePos = new Vector2(screenPos.x / scale, (Screen.height - screenPos.y) / scale);
 
-            if (testLineDrawer.m_labelPoint != null)
-            {
-                testLineDrawer.m_labelPoint.style.left = LinePos.x;
-                testLineDrawer.m_labelPoint.style.top = LinePos.y;
-                //testLineDrawer.m_labelPoint.transform.position = LinePos;
-            }
-            else
-            {
-                Debug.Log("Test point is null");
-            }
-        }*/
-
-        if(testLineDrawer != null)
-        {
-            //testLineDrawer.MarkDirtyRepaint();
-        }
-        else
-        {
-
-        }
-        //LineDrawer
     }
 
 #if UNITY_EDITOR
@@ -276,7 +246,6 @@ public class PresentationSection : MonoBehaviour
     public bool AutoSizeSlides;
     public VirtualCameraObject sectionCamera;
     [Space(10)]
-    public List<GameObject> CallOutPoints = new List<GameObject>();
 
     public List<TextMeshPro> WorldspaceLabels = new List<TextMeshPro>();
 
@@ -325,51 +294,6 @@ public class PresentationSection : MonoBehaviour
     {
         public CutOutPoint CutOut;
         public Material[] CutOutMaterial;
-    }
-
-/*    [Serializable]
-    public struct MenuBinding
-    {
-        [Tooltip("The selected type.")]
-        public Type selectedType;
-
-        public GameObject gameObjectSwitch;
-
-        [Tooltip("The presentation section script reference.")]
-        public PresentationSection presentationSection;
-
-        [Tooltip("The minimum value for the min max slider.")]
-        public float minValue;
-
-        [Tooltip("The maximum value for the min max slider.")]
-        public float maxValue;
-
-        public bool InitialBooleanValue;
-
-        public string Title;
-
-        // The enum for the selected type.
-        public enum Type
-        {
-            Booleans,
-            Visbility,
-            SectionSwitch,
-            Sliders,
-            WorldSpaceLabels,
-            Markers
-        }
-    }*/
-
-    public IEnumerator CanvasImageFade(float start, float end, float duration)
-    {
-        float time = 0;
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            TransitionSettings.canvasGroup.alpha = Mathf.Lerp(start, end, time / duration);
-            yield return null;
-        }
-        TransitionSettings.canvasGroup.alpha = end;
     }
 
     [SerializeField]

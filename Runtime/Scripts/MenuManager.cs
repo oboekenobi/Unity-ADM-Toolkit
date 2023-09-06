@@ -31,6 +31,7 @@ public class MenuManager : VisualElement
     VisualElement m_helpContactButton;
 
     Slider m_SliderHandle;
+    VisualElement slider;
     Slider m_mouseSensitivitySlider;
 
     VisualElement m_GameWindow;
@@ -43,6 +44,7 @@ public class MenuManager : VisualElement
 
     public static bool MouseInGameWindow;
     public static bool PopoutIsSliding;
+    public static bool CanScrubTimeline;
 
 
 
@@ -119,6 +121,11 @@ public class MenuManager : VisualElement
 
 
         m_SliderHandle?.RegisterCallback<MouseDownEvent>(ev => ReleaseTimeline());
+
+        slider = this.Q<VisualElement>("TimelineSlider");
+
+        slider?.RegisterCallback<MouseEnterEvent>(ev => CanScrubTimeline = true, TrickleDown.TrickleDown);
+        slider?.RegisterCallback<MouseLeaveEvent>(ev => CanScrubTimeline = false, TrickleDown.TrickleDown);
 
         m_GameWindow?.RegisterCallback<MouseDownEvent>(evt => ReleaseMouse());
 
@@ -280,7 +287,7 @@ public class MenuManager : VisualElement
             InputManager.AdjustCameraFraming(0, 0);
         }
     }
-
+    public static bool LabelsToggled = true;
     public void ToggleLabels()
     {
         if (m_LabelToggle.value)
@@ -291,15 +298,20 @@ public class MenuManager : VisualElement
                 Container.RemoveFromClassList("activeCanvas");
                 Container.AddToClassList("inactiveCanvas");
             }
+            uI_Manager.HideWorldSpaceLabels();
+            LabelsToggled = false;
             DisplayPopupWarning("Callouts disabled", 2);
         }
         else
         {
+            uI_Manager.ShowWorldSpaceLabels();
+            LabelsToggled = true;
             VisualElement Container = uI_Manager.projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
             Container.RemoveFromClassList("inactiveCanvas");
             Container.AddToClassList("activeCanvas");
             DisplayPopupWarning("Callouts enabled", 2);
         }
+
     }
 
     public void ControlTimeline()
@@ -342,10 +354,14 @@ public class MenuManager : VisualElement
         }
 
         InputManager.CameraRotating = true;
+
         if (m_PlayButton.value)
         {
-            uI_Manager.PauseTimeline();
-            uI_Manager.CheckForEnd = false;
+            if(uI_Manager.projectManager.ActiveSection.TimelineOverride == null)
+            {
+                uI_Manager.PauseTimeline();
+                uI_Manager.CheckForEnd = false;
+            }
         }
     }
 

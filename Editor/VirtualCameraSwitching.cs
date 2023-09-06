@@ -161,10 +161,13 @@ class CameraLabel : EditorToolbarButton//, IAccessContainerWindow
 
         Undo.RegisterCreatedObjectUndo(labelPoint, "Create Label");
 */
+        ProjectManager projectManager = GameObject.FindFirstObjectByType<ProjectManager>(); 
 
         GameObject newObj = PrefabUtility.InstantiatePrefab(Resources.Load<Object>("PreFabs/Label Point")) as GameObject;
+        CalloutBinding binding = newObj.GetComponent<CalloutBinding>();
 
-
+        binding.Section = projectManager.ActiveSection;
+        projectManager.ActiveSection.CalloutBindings.Add(binding);
     }
 
 

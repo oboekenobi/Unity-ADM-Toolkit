@@ -10,7 +10,6 @@ using System;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
-using LS.DrawTexture.Utils;
 
 namespace ADM.UISystem
 {
@@ -79,6 +78,7 @@ namespace ADM.UISystem
         public List<SectionListEntryController> RegisteredSections = new List<SectionListEntryController>();
         public List<UniversalRenderPipelineAsset> RenderPipelines = new List<UniversalRenderPipelineAsset>();
         public UIDocument uIDocument;
+        public static VisualElement Root;
         public MenuManager menuManager;
         private SectionListController listController;
         [HideInInspector]
@@ -147,6 +147,7 @@ namespace ADM.UISystem
         #region Component Dependencies
         public Material DitherHighlight;
         public GameObject MarkerList;
+        
 
         //Cursor Textures
         public Texture2D recordCursor;
@@ -187,6 +188,7 @@ namespace ADM.UISystem
         #region Monobehaviour Functions
         void Awake()
         {
+            Root = uIDocument.rootVisualElement;
             projectManager = GameObject.FindFirstObjectByType<ProjectManager>();
 
             if (projectManager == null)
@@ -407,6 +409,13 @@ namespace ADM.UISystem
                 }
             }
 
+            if(projectManager.ActiveSection.TimelineOverride != null)
+            {
+                CurrentTimeline = projectManager.ActiveSection.TimelineOverride;
+                ResumeTimeline();
+                PauseTimeline();
+            }
+
             cam.MainCameraTransform.localPosition = Vector3.zero;
             cam.MainCameraTransform.localEulerAngles = Vector3.zero;
         }
@@ -441,6 +450,20 @@ namespace ADM.UISystem
 
 
             }
+
+            if (!InputManager.isTransitioning)
+            {
+                if(projectManager.ActiveSection.CalloutBindings.Count > 0)
+                {
+                    foreach (CalloutBinding binding in projectManager.ActiveSection.CalloutBindings)
+                    {
+                        float opacity = InputManager.CalculateRotationFactor(binding.transform.position, InputManager.MainCamera);
+
+                        binding.calloutContainer.style.opacity = opacity;
+                    }
+                }
+            }
+
             if (UnityEngine.Application.isPlaying)
             {
 
@@ -465,7 +488,7 @@ namespace ADM.UISystem
                     ResumeOrPauseTimeline();
                 }
 
-                HandleTimeline();
+                UpdateTimeline();
 
 
             }
@@ -476,7 +499,20 @@ namespace ADM.UISystem
         #region UIelement Callback Functions
         private bool controlsWereAdded;
 
-
+        public static void GameWindowEditMode(bool value)
+        {
+            VisualElement gameWindow = Root.Q<VisualElement>("GameWindow");
+            if (value == true)
+            {
+                gameWindow.RemoveFromClassList("defualt_gameWindow");
+                gameWindow.AddToClassList("recording_gameWindow");
+            }
+            else
+            {
+                gameWindow.RemoveFromClassList("recording_gameWindow");
+                gameWindow.AddToClassList("default_gameWindow");
+            }
+        }
         public void ChangeCalloutCanvas()
         {
             _currentCalloutCanvas.style.display = DisplayStyle.Flex;
@@ -1031,6 +1067,7 @@ namespace ADM.UISystem
         }
 
         #region Timeline Scrubber Management
+        public PlayableDirector CurrentTimeline;
         public bool InitializeCinemachineVariables;
         public float actTime;
         public bool canScrub;
@@ -1038,27 +1075,59 @@ namespace ADM.UISystem
         public bool TimelineActive;
         public bool TimelinePaused;
         public bool CheckForEnd;
+        public bool CheckForTransitionEnd;
         public bool TimelineEnded;
+        public bool FreezeTimeline = false;
 
-        public void HandleTimeline()
+        public void UpdateTimeline()
         {
+
             if (TimelineActive)
             {
-                float ProgressValue = (float)(projectManager.ActiveSection.director.time / projectManager.ActiveSection.director.duration);
-                TimelineSlider.value = ProgressValue;
                 if (CheckForEnd)
+                {
+                    if(MenuManager.CanScrubTimeline)
+                    {
+                        Input.GetMouseButtonDown(0);
+                        {
+                            FreezeTimeline = true;
+                        }
+                    }
+                    if (FreezeTimeline)
+                    {
+                        Input.GetMouseButtonUp(0);
+                        {
+                            FreezeTimeline = false;
+                        }
+                    }
+                    if (!FreezeTimeline)
+                    {
+                        float ProgressValue = (float)(CurrentTimeline.time / CurrentTimeline.duration);
+                        TimelineSlider.value = ProgressValue;
+
+                        if (CurrentTimeline.time == CurrentTimeline.duration)
+                        {
+                            PauseTimeline();
+                            PlayButton.value = false;
+                            TimelineEnded = true;
+                            TimelineActive = false;
+                            CheckForEnd = false;
+                        }
+                    }
+                    
+                }
+                if (CheckForTransitionEnd)
                 {
                     if (projectManager.ActiveSection.director.time == projectManager.ActiveSection.director.duration)
                     {
-                        PauseTimeline();
-                        PlayButton.value = false;
+                        projectManager.ActiveSection.director.Pause();
+                        projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
                         cam.ResetTimelineCamera();
-                        TimelineEnded = true;
-                        TimelineActive = false;
-                        CheckForEnd = false;
+                        InputManager.CachedPivotPosition = cam.BlendedCameraPivot();
+                        InputManager.isTransitioning = false;
+                        CheckForTransitionEnd = false;
                     }
                 }
-
 
             }
             if (isScrubbing)
@@ -1072,27 +1141,39 @@ namespace ADM.UISystem
         }
         public void UIScrubTimeline()
         {
-            RestrictMovement = true;
+            if (projectManager.ActiveSection.TimelineOverride == null)
+            {
+                RestrictMovement = true;
+                if (cam.brain.IsBlending && cam.brain.ActiveBlend.BlendWeight >= 0 && cam.brain.ActiveBlend.BlendWeight <= 1 && !InitializeCinemachineVariables)
+                {
+                    cam.currentBrainBlend = cam.brain.ActiveBlend.BlendWeight;
+                    cam.startCameraPosition = cam.brain.ActiveBlend.CamA.VirtualCameraGameObject.transform.position;
+                    cam.secondCameraPosition = cam.brain.ActiveBlend.CamB.VirtualCameraGameObject.transform.position;
+                }
+            }
             if (!TimelineActive)
             {
-                InputManager.isTransitioning = true;
-                InputManager.CachedPivotPosition = cam.BlendedCameraPivot();
-                float maxtime = (float)projectManager.ActiveSection.director.duration;
+                
+                float maxtime = (float)CurrentTimeline.duration;
                 actTime = TimelineSlider.value * maxtime;
-                projectManager.ActiveSection.director.time = actTime;
+                CurrentTimeline.time = actTime;
 
-                //projectManager.ActiveSection.director.RebuildGraph();
-                projectManager.ActiveSection.director.Play();
-                projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(0);
+                //CurrentTimeline.RebuildGraph();
+                CurrentTimeline.Play();
+                CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(0);
 
-                if (projectManager.ActiveSection.director.time != projectManager.ActiveSection.director.duration)
+                if (CurrentTimeline.time != CurrentTimeline.duration)
                 {
                     TimelineEnded = false;
                 }
+                if (projectManager.ActiveSection.TimelineOverride == null)
+                {
+                    InputManager.CachedPivotPosition = cam.BlendedCameraPivot();
+                    GrabMousePosition();
 
+                }
+                TimelineActive = false;
                 canScrub = false;
-
-                GrabMousePosition();
                 isScrubbing = true;
                 PlayButton.value = false;
 
@@ -1100,30 +1181,26 @@ namespace ADM.UISystem
 
 
             }
-            if (cam.brain.IsBlending && cam.brain.ActiveBlend.BlendWeight >= 0 && cam.brain.ActiveBlend.BlendWeight <= 1 && !InitializeCinemachineVariables)
-            {
-                cam.currentBrainBlend = cam.brain.ActiveBlend.BlendWeight;
-                cam.startCameraPosition = cam.brain.ActiveBlend.CamA.VirtualCameraGameObject.transform.position;
-                cam.secondCameraPosition = cam.brain.ActiveBlend.CamB.VirtualCameraGameObject.transform.position;
-            }
         }
         public void GrabMousePosition()
         {
-            TimelineActive = false;
             InputManager.isTransitioning = true;
 
             cam.MainCameraTransform.localPosition = Vector3.zero;
             cam.MainCameraTransform.localEulerAngles = Vector3.zero;
         }
         public void TimelineSkip()
-        {
+        { 
             if (Input.GetMouseButton(0) && isScrubbing)
             {
                 TimelineScrubberisSelected = true;
                 if (!canScrub)
                 {
-                    //isScrubbing = true;
-                    GrabMousePosition();
+                    if (projectManager.ActiveSection.TimelineOverride == null)
+                    {
+                        GrabMousePosition();
+                    }
+                    TimelineActive = false;
 
                     canScrub = true;
                 }
@@ -1132,40 +1209,49 @@ namespace ADM.UISystem
             {
                 isScrubbing = false;
                 canScrub = false;
-                cam.ResetTimelineCamera();
-                //cam.gameObject.transform.position = cam.CameraBlendOffset();
-                projectManager.ActiveSection.director.Pause();
-                projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
+                if (projectManager.ActiveSection.TimelineOverride == null)
+                {
+                    cam.ResetTimelineCamera();
+                }
+
+                CurrentTimeline.Pause();
+                CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
                 TimelineScrubberisSelected = false;
             }
 
         }
         public void SetSlider()
         {
-            if (InputManager.isBlending)
+            if(projectManager.ActiveSection.TimelineOverride == null)
             {
-                cam.CachedDistance = cam.distanceBetweenCameraAndTarget();
-                InputManager.isBlending = false;
+                if (InputManager.isBlending)
+                {
+                    cam.CachedDistance = cam.distanceBetweenCameraAndTarget();
+                    InputManager.isBlending = false;
+                }
+                RestrictMovement = false;
+                cam.ResetTimelineCamera();
             }
-            RestrictMovement = false;
             isScrubbing = false;
             canScrub = false;
-            cam.ResetTimelineCamera();
-            projectManager.ActiveSection.director.Pause();
-            projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
+            CurrentTimeline.Pause();
+            CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
             TimelineScrubberisSelected = false;
         }
         public void PlayTimeline()
         {
-            projectManager.ActiveSection.director.Play();
-            projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
+            CurrentTimeline.Play();
+            CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
             TimelineActive = true;
             CheckForEnd = true;
-            cam.transform.position = cam.MainCameraTransform.position;
-            cam.transform.position = cam.MainCameraTransform.eulerAngles;
-            cam.MainCameraTransform.localPosition = Vector3.zero;
-            cam.MainCameraTransform.localEulerAngles = Vector3.zero;
-            InputManager.isTransitioning = true;
+            if(projectManager.ActiveSection.TimelineOverride == null)
+            {
+                cam.transform.position = cam.MainCameraTransform.position;
+                cam.transform.position = cam.MainCameraTransform.eulerAngles;
+                cam.MainCameraTransform.localPosition = Vector3.zero;
+                cam.MainCameraTransform.localEulerAngles = Vector3.zero;
+                InputManager.isTransitioning = true;
+            }
         }
 
         public void ResumeTimeline()
@@ -1173,37 +1259,47 @@ namespace ADM.UISystem
             PlayButton.value = true;
             if (TimelineEnded && !TimelineScrubberisSelected)
             {
-                projectManager.ActiveSection.director.time = 0;
-                //projectManager.ActiveSection.director.RebuildGraph();
-                projectManager.ActiveSection.director.Pause();
-                projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
+                CurrentTimeline.time = 0;
+                //CurrentTimeline.RebuildGraph();
+                CurrentTimeline.Pause();
+                CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
                 TimelineActive = true;
                 TimelineEnded = false;
             }
 
+            if(projectManager.ActiveSection.TimelineOverride != null)
+            {
+                CurrentTimeline.Play();
+                CurrentTimeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
+                TimelineActive = true;
+                CheckForEnd = true;
+            }
 
-            projectManager.ActiveSection.director.Play();
-            projectManager.ActiveSection.director.playableGraph.GetRootPlayable(0).SetSpeed(1);
-            TimelineActive = true;
-            CheckForEnd = true;
-
-            InputManager.isTransitioning = true;
-            cam.MainCameraTransform.localPosition = Vector3.zero;
-            cam.MainCameraTransform.localEulerAngles = Vector3.zero;
-            //cam.ResetPreviousCamera(projectManager.ActiveSection.VirtualCamera);
+            if (CurrentTimeline.time == CurrentTimeline.duration)
+            {
+                InputManager.isTransitioning = true;
+                cam.MainCameraTransform.localPosition = Vector3.zero;
+                cam.MainCameraTransform.localEulerAngles = Vector3.zero;
+            }
         }
 
         public void PauseTimeline()
         {
             RestrictMovement = false;
             PlayButton.value = false;
-            if (cam.brain.ActiveBlend != null)
+            if (CurrentTimeline.time == CurrentTimeline.duration)
             {
-                cam.CachedDistance = cam.distanceBetweenCameraAndTarget();
+                if(projectManager.ActiveSection.TimelineOverride == null)
+                {
+                    if (cam.brain.ActiveBlend != null)
+                    {
+                        cam.CachedDistance = cam.distanceBetweenCameraAndTarget();
+                        InputManager.CameraRotated = false;
+                    }
+                }
             }
             SetSlider();
-            projectManager.ActiveSection.director.Pause();
-            InputManager.CameraRotated = false;
+            CurrentTimeline.Pause();
             TimelineActive = false;
             TimelineEnded = false;
         }
@@ -1218,9 +1314,12 @@ namespace ADM.UISystem
             Debug.Log("TimelinePLaying");
             if (TimelineActive)
             {
+                if(projectManager.ActiveSection.TimelineOverride == null)
+                {
+                    cam.ResetTimelineCamera();
+                    InputManager.CameraRotated = false;
+                }
                 PauseTimeline();
-                cam.ResetTimelineCamera();
-                InputManager.CameraRotated = false;
                 TimelineActive = false;
                 TimelineEnded = false;
                 return;
@@ -1310,17 +1409,44 @@ namespace ADM.UISystem
                     }
                 }
 
+
                 if (activeSection.hideTimeline && !PreviousPresentationSection.hideTimeline)
                 {
-                    m_scrubBarLayout.RemoveFromClassList("activeTimeline");
-                    m_scrubBarLayout.AddToClassList("inactiveTimeline");
+
+                    if (!PreviousPresentationSection.hideTimeline)
+                    {
+                        m_scrubBarLayout.RemoveFromClassList("activeTimeline");
+                        m_scrubBarLayout.AddToClassList("inactiveTimeline");
+                    }
                 }
-                if(!activeSection.hideTimeline && PreviousPresentationSection.hideTimeline) 
+                if(!activeSection.hideTimeline) 
                 {
-                    m_scrubBarLayout.AddToClassList("activeTimeline");
-                    m_scrubBarLayout.RemoveFromClassList("inactiveTimeline");
+                    if(activeSection.TimelineOverride != null)
+                    {
+                        if(PreviousPresentationSection.TimelineOverride != null)
+                        {
+                            if (activeSection.TimelineOverride != PreviousPresentationSection.TimelineOverride)
+                            {
+                                CurrentTimeline = activeSection.TimelineOverride;
+                            }
+                        }
+                        else
+                        {
+                            CurrentTimeline = activeSection.TimelineOverride;
+                        }
+                    }
+                    else
+                    {
+                        CurrentTimeline = activeSection.director;
+                    }
+                    if (PreviousPresentationSection.hideTimeline)
+                    {
+                        m_scrubBarLayout.AddToClassList("activeTimeline");
+                        m_scrubBarLayout.RemoveFromClassList("inactiveTimeline");
+                    }
                 }
 
+                
 
                 if (targetSection.PopupWindowContent != null)
                 {
@@ -1399,17 +1525,25 @@ namespace ADM.UISystem
                 VisualElement Container = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement.Q<VisualElement>("RootCalloutCanvas");
                 Container.RemoveFromClassList("activeCanvas");
                 Container.AddToClassList("inactiveCanvas");
-                if (PreviousPresentationSection.CallOutPoints.Count > 0)
-                {
-                    foreach (GameObject point in PreviousPresentationSection.CallOutPoints)
-                    {
-                        point.SetActive(true);
-                    }
-                }
 
+             
                 targetSection.director.RebuildGraph();
                 projectManager.ActiveSection = targetSection;
                 ChangeTitle();
+
+
+
+                if (targetSection.WorldCallouts == null && PreviousPresentationSection.WorldCallouts != null)
+                {
+                    if (PreviousPresentationSection.WorldCallouts != null)
+                    {
+                        StartCoroutine(ResetWorldLabels());
+                    }
+                }
+                else
+                {
+                    StartCoroutine(ToggleWorldLabels(0, 1, 0.3f));
+                }
 
                 if (!menuManager.m_LabelToggle.value)
                 {
@@ -1418,13 +1552,6 @@ namespace ADM.UISystem
                     ActiveContainer.AddToClassList("activeCanvas");
                 }
                 
-                if(targetSection.CallOutPoints.Count > 0)
-                {
-                    foreach(GameObject point in targetSection.CallOutPoints)
-                    {
-                        point.SetActive(true);
-                    }
-                }
 
                 if (targetSection.ControlPanelOverride.menuBindings.Count > 0)
                 {
@@ -1451,9 +1578,14 @@ namespace ADM.UISystem
                     m_controlPanelTitleLayout.AddToClassList("activeTimeline");
                 }
 
-                if (PreviousPresentationSection.ToolsQuery != null)
+                if (PreviousPresentationSection.VisualElementsToShow.Count > 0)
                 {
-                    //uI_Manager.ToolsManager.Q(PreviousPresentationSection.ToolsQuery).style.display = DisplayStyle.None;
+                    foreach(string binding in PreviousPresentationSection.VisualElementsToShow)
+                    {
+                        VisualElement element = root.Q<VisualElement>(binding);
+
+                        element.style.display = DisplayStyle.None;
+                    }
                 }
                 if (PreviousPresentationSection.SectionMarkers.Count > 0)
                 {
@@ -1463,13 +1595,14 @@ namespace ADM.UISystem
                         marker.Marker.style.display = DisplayStyle.None;
                     }
                 }
-                if (targetSection.ToolsQuery != null)
+                if (targetSection.VisualElementsToShow.Count > 0)
                 {
-                    //uI_Manager.ToolsManager.Q(section.ToolsQuery).style.display = DisplayStyle.Flex;
-                }
-                else if (PreviousPresentationSection.ToolsQuery != null)
-                {
-                    ToolsManager.Q(PreviousPresentationSection.ToolsQuery).style.display = DisplayStyle.None;
+                    foreach (string binding in targetSection.VisualElementsToShow)
+                    {
+                        VisualElement element = root.Q<VisualElement>(binding);
+
+                        element.style.display = DisplayStyle.Flex;
+                    }
                 }
                 if (targetSection.SectionMarkers.Count > 0)
                 {
@@ -1493,6 +1626,8 @@ namespace ADM.UISystem
 
         public IEnumerator SectionChangeRoutine()
         {
+            CheckForTransitionEnd = true;
+
             if (PreviousPresentationSection.CustomMenu != null)
             {
                 PreviousPresentationSection.CustomMenu.MenuElement.style.opacity = 0;
@@ -1502,6 +1637,20 @@ namespace ADM.UISystem
 
             cam.SetCinemachineCamera();
             PreviousPresentationSection.director.Stop();
+
+            if (projectManager.ActiveSection.TimelineOverride != null)
+            {
+                cam.TransitionCamera.transform.position = cam.MainCameraTransform.transform.position;
+                cam.TransitionCamera.transform.eulerAngles = cam.MainCameraTransform.transform.eulerAngles;
+                cam.MainCameraTransform.localPosition = Vector3.zero;
+                cam.MainCameraTransform.localEulerAngles = Vector3.zero;
+
+                projectManager.ActiveSection.director.Play();
+
+            }
+            
+            InputManager.CameraRotated = false;
+
             ResumeTimeline();
             InputManager.isTransitioning = true;
             //manager.ActiveSection.director.Play();
@@ -1512,6 +1661,46 @@ namespace ADM.UISystem
             Transition.FadeFromAlpha();
             Transition.FadeFromCanvasGroup();
         }
+        public IEnumerator ToggleWorldLabels(float start, float end, float duration)
+        {
+            float elapsedTime = 0f;
+            while(elapsedTime < duration)
+            {
+                projectManager.ActiveSection.WorldCallouts.alpha = Mathf.Lerp(start, end, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            projectManager.ActiveSection.WorldCallouts.alpha = end;
+        }
+
+        public IEnumerator ResetWorldLabels()
+        {
+            float elapsedTime = 0f;
+            float duration = 0.3f;
+            while (elapsedTime < duration)
+            {
+                PreviousPresentationSection.WorldCallouts.alpha = Mathf.Lerp(1, 0, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            PreviousPresentationSection.WorldCallouts.alpha = 0;
+        }
+
+        public void HideWorldSpaceLabels()
+        {
+            if(projectManager.ActiveSection.WorldCallouts != null)
+            {
+                StartCoroutine(ToggleWorldLabels(1, 0, 0.3f));
+            }
+        }
+        public void ShowWorldSpaceLabels()
+        {
+            if(projectManager.ActiveSection.WorldCallouts != null)
+            {
+                StartCoroutine(ToggleWorldLabels(0, 1, 0.3f));
+            }
+        }
+
         public Vector2 TitleDimensions;
         public void ChangeTitle()
         {

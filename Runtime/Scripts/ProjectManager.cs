@@ -6,6 +6,8 @@ using Cinemachine;
 using UnityEngine.UIElements;
 using ADM.UISystem;
 using UnityEditor;
+using UnityEngine.Playables;
+using static System.Collections.Specialized.BitVector32;
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
@@ -125,7 +127,9 @@ public class ProjectManager : MonoBehaviour
                 ActiveContainer.RemoveFromClassList("activeCanvas");
                 ActiveContainer.AddToClassList("inactiveCanvas");
             }
+            
         }
+        SetActiveEditorCamera(ActiveSection);
 
         ChangeTitleInEditorMode();
     }
@@ -304,8 +308,8 @@ public class ProjectManager : MonoBehaviour
                     {
                         ActiveSection.TweenCameras[j].gameObject.SetActive(false);
                     }
-                }
-                if (ActiveSection.CallOutPoints.Count > 0)
+                } 
+                /*if (ActiveSection.CallOutPoints.Count > 0)
                 {
                     foreach (GameObject point in ActiveSection.CallOutPoints)
                     {
@@ -314,7 +318,7 @@ public class ProjectManager : MonoBehaviour
                             point.SetActive(false);
                         }
                     }
-                }
+                }*/
 
                 for (int i = 0; i < Sections.Count; i++)
                 {
@@ -360,13 +364,13 @@ public class ProjectManager : MonoBehaviour
                         }
                     }
 
-                    foreach (GameObject point in ActiveSection.CallOutPoints)
+                    /*foreach (GameObject point in ActiveSection.Ca)
                     {
                         if (point != null)
                         {
                             point.SetActive(true);
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -393,6 +397,21 @@ public class ProjectManager : MonoBehaviour
         }
 
         return 20f;
+    }
+
+    public void SetActiveEditorCamera(PresentationSection targetSection)
+    {
+        uI_Manager.PreviousPresentationSection = ActiveSection;
+        CanSwitchEditorCamera = true;
+
+        EditorCameraSwitch(targetSection.VirtualCamera);
+
+        inputManager.SetDefaultCinemachineCamera();
+
+        ActiveSection.director.time = 0;
+        ActiveSection.director.RebuildGraph();
+        ActiveSection.director.Play();
+        ActiveSection.director.playableGraph.GetRootPlayable(0);
     }
 
     public void ChangeTitleInEditorMode()

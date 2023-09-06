@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using ADM.UISystem;
+using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(PresentationSection))]
 public class PresentationSectionEditor : Editor
@@ -47,11 +48,8 @@ public class PresentationSectionEditor : Editor
     {
         if (!Application.isPlaying)
         {
-            PresentationSection camera = targetSection;
 
-            
-
-            if (camera == null)
+            if (targetSection == null)
             {
                 return;
             }
@@ -61,31 +59,9 @@ public class PresentationSectionEditor : Editor
                 manager = GameObject.FindFirstObjectByType<ProjectManager>();
             }
 
-            if (manager.SceneCameras != null)
-            {
-                manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
-                manager.CanSwitchEditorCamera = true;
-                /*if (manager.ActiveSection != targetSection)
-                {
-                   
-                    manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
-                }*/
-            }
             if (manager.ActiveSection != targetSection)
             {
-                manager.uI_Manager.PreviousPresentationSection = manager.ActiveSection;
-                manager.CanSwitchEditorCamera = true;
-
-                manager.EditorCameraSwitch(camera.sectionCamera.VirtualCamera);
-  
-                manager.inputManager.SetDefaultCinemachineCamera();
-
-
-                //manager.ActiveSection.director.time = manager.ActiveSection.director.duration;
-                manager.ActiveSection.director.time = 0;
-                manager.ActiveSection.director.RebuildGraph();
-                manager.ActiveSection.director.Play();
-                manager.ActiveSection.director.playableGraph.GetRootPlayable(0);
+                manager.SetActiveEditorCamera(targetSection);
 
                 //lock the Timeline and release it if the current selected camera is different
                 TimelineState.SetLockStatus(false);

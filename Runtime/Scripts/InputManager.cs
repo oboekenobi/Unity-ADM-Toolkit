@@ -485,12 +485,6 @@ namespace ADM.UISystem
                 #region Logic
                 //Indicate the camera has started rotating so that it does not cut out when exiting the gamewindow until the mouse is released.
 
-                
-
-                if (brain.ActiveBlend != null)
-                {
-                    CurrentBlend = brain.ActiveBlend.TimeInBlend;
-                }
 
                 CameraRotating = true;
                 CameraRotated = true;
@@ -499,8 +493,71 @@ namespace ADM.UISystem
                 #endregion
 
                 #region Input Logic
+                if (!UI_Manager.isScrubbing)
+                {
+                    if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.Tethered)
+                    {
+                        MainCameraTransform.LookAt(CachedPivotPosition);
+ 
+                        if (!isTransitioning)
+                        {
+                            if (!PivotShifting)
+                            {
+                                if (slerpedValue == 1)
+                                {
+                                    slerpedValue = slerpValue;
+                                }
+                                if (!UI_Manager.RestrictMovement && !DICOMSliderInput.wasSliding)
+                                {
+                                    rotX += -delta.y * mouseRotateSpeed;
+                                    rotY += delta.x * mouseRotateSpeed;
+                                }
+                            }
+                            else
+                            {
+                                //MainCameraTransform.localPosition.x += delta.x;
+                            }
+                        }
 
-                if (uI_Manager.TimelineActive && projectManager.ActiveSection.hideTimeline || !uI_Manager.TimelineActive)
+                        if (DICOMSliderInput.wasSliding)
+                        {
+                            DICOMSliderInput.wasSliding = false;
+                        }
+
+                        
+
+                        if (rotX < minXRotAngle)
+                        {
+                            rotX = minXRotAngle;
+                        }
+
+                        else if (rotX > maxXRotAngle)
+                        {
+                            rotX = maxXRotAngle;
+                        }
+
+                    }
+
+                    if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.POV)
+                    {
+                        if (!UI_Manager.RestrictMovement)
+                        {
+
+                            Vector2 multipliedDelta = (delta * POVRotateSpeed) * projectManager.ActiveSection.MouseSensitivityMultiplier;
+
+                            cameraVerticalRotation -= multipliedDelta.y;
+                            cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
+                            MainCamera.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
+
+                            MainCameraTransform.transform.Rotate(Vector3.up * multipliedDelta.x);
+                        }
+
+
+                    }
+                }
+                
+
+                /*if (uI_Manager.TimelineActive && projectManager.ActiveSection.hideTimeline || !uI_Manager.TimelineActive)
                 {
                     if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.Tethered)
                     {
@@ -569,18 +626,21 @@ namespace ADM.UISystem
 
                     if (projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.POV)
                     {
-                        Debug.Log("POV Camera Rotating");
+                        if (!UI_Manager.RestrictMovement)
+                        {
 
-                        Vector2 multipliedDelta = (delta * POVRotateSpeed) * projectManager.ActiveSection.MouseSensitivityMultiplier;
+                            Vector2 multipliedDelta = (delta * POVRotateSpeed) * projectManager.ActiveSection.MouseSensitivityMultiplier;
 
-                        cameraVerticalRotation -= multipliedDelta.y;
-                        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
-                        MainCamera.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
+                            cameraVerticalRotation -= multipliedDelta.y;
+                            cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
+                            MainCamera.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
+
+                            MainCameraTransform.transform.Rotate(Vector3.up * multipliedDelta.x);
+                        }
                         
-                        MainCameraTransform.transform.Rotate(Vector3.up * multipliedDelta.x);
 
                     }
-                }
+                }*/
 
         
                 #endregion
@@ -604,7 +664,6 @@ namespace ADM.UISystem
         public float CurrentBlend;
         public Vector3  BlendedCameraPivot()
         {
-
             //Vector3 blend = ((MainCameraTransform.position) + (MainCameraTransform.forward * distanceBetweenCameraAndTarget()));
 
             Vector3 blend = new Vector3();
@@ -663,13 +722,12 @@ namespace ADM.UISystem
             Debug.DrawLine(MainCameraTransform.position, BlendedCameraPivot(), Color.red);
             Debug.DrawLine(blendedCamera, BlendedCameraPivot(), Color.green);
 
-
             //Updated Camera Logic
             if (!isTransitioning && !UI_Manager.RestrictMovement && projectManager.ActiveSection.CameraManipulatorType == PresentationSection.CameraManipulator.Tethered)
             {
                 ScrollWheelChange = Mathf.Lerp(ScrollWheelChange, ScrollWheel * (ZoomSpeed + projectManager.ActiveSection.ZoomSpeedOffset), slerpedValue);
                 cameraDistance = -CachedDistance;
-                zoomDist = cameraDistance - + ScrollWheelChange;
+                zoomDist = cameraDistance - + (ScrollWheelChange * ZoomSpeed);
 
                 //clampedDistance = Vector3.Distance(transform.position, projectManager.ActiveSection.Camera.PivotAngle.position);
 
@@ -689,11 +747,44 @@ namespace ADM.UISystem
                 MainCameraTransform.eulerAngles = new Vector3(rotate.x, rotate.y, rotate.z + transform.eulerAngles.z);
             }
 
-            if (isTransitioning)
+            if (isTransitioning && brain.IsBlending)
             {
+                CurrentBlend = brain.ActiveBlend.TimeInBlend;
 
-                //MainCameraTransform.transform.position = transform.position;
-                //MainCameraTransform.eulerAngles = transform.eulerAngles;
+                if (CurrentBlend >= 0.99f)
+                {
+                    canStopTransition = true;
+                }
+
+                
+                currentBrainBlend = brain.ActiveBlend.BlendWeight;
+                startCameraPosition = brain.ActiveBlend.CamA.VirtualCameraGameObject.transform.position;
+                secondCameraPosition = brain.ActiveBlend.CamB.VirtualCameraGameObject.transform.position;
+                CachedPivotPosition = BlendedCameraPivot();
+                CachedDistance = distanceBetweenCameraAndTarget();
+
+                if (CurrentBlend >= 0.99f && canStopTransition && projectManager.ActiveSection.director.time != 0 && !CameraRotated)
+                {
+                    if (projectManager.ActiveSection.TimelineOverride == null)
+                    {
+
+                    }
+                    target = projectManager.ActiveSection.sectionCamera.PivotAngle;
+                    ScrollWheel = 0;
+                    ScrollWheelChange = 0;
+
+
+                    if (uI_Manager.PreviousPresentationSection != null)
+                    {
+                        ResetPreviousCamera(uI_Manager.PreviousPresentationSection.sectionCamera.VirtualCamera);
+                    }
+                    ResetTimelineCamera();
+
+                    isTransitioning = false;
+                    canStopTransition = false;
+                }
+
+
             }
             if (projectManager.ActiveSection.WorldspaceLabels.Count > 0)
             {
@@ -760,9 +851,8 @@ namespace ADM.UISystem
             rotX = WrapAngle(blendedCameraRotation.x);
             rotY = WrapAngle(blendedCameraRotation.y);
 
-            CachedPivotPosition = BlendedCameraPivot();
-            //distanceBetweenCameraAndTarget = (Vector3.Distance(transform.position, CachedPivotPosition)) - SplitScreen.ScaleCamera;
-            //CachedDistance = distanceBetweenCameraAndTarget();
+            
+            CachedDistance = distanceBetweenCameraAndTarget();
             ScrollWheel = 0;
             ScrollWheelChange = 0;
             slerpedValue = 1;
@@ -790,6 +880,20 @@ namespace ADM.UISystem
             Vector3 HeightWorldPos = MainCamera.ScreenToWorldPoint(new Vector3(RayPoint.x, AdjustedHeightPos, RayPoint.z));
             float HeightDistance = Vector3.Distance(RayPoint, HeightWorldPos);
             MainCamera.transform.localPosition = new Vector3(WidthDistance, HeightDistance, 0);*/
+        }
+
+        public static float CalculateRotationFactor(Vector3 targetPosition, Camera camera)
+        {
+            // Calculate the vector from the camera to the target position
+            Vector3 toTarget = targetPosition - camera.transform.position;
+
+            // Calculate the dot product between the camera's forward vector and the toTarget vector
+            float dotProduct = Vector3.Dot(camera.transform.forward, toTarget);
+
+            // Normalize the dot product to a value between 0 and 1
+            float rotationFactor = Mathf.InverseLerp(-1f, 1f, dotProduct);
+
+            return rotationFactor;
         }
 #if UNITY_EDITOR
         public static void BindTimelineTracks(string SourceTrackName, GameObject obj, PlayableDirector director)

@@ -36,7 +36,11 @@ public class CalloutFadeAsset : PlayableBehaviour
             VisualElement root = projectManager.ActiveSection.CalloutCanvasDocument.rootVisualElement;
 
             root.style.opacity = finalIntensity;
-            
+
+            foreach (CalloutBinding binding in projectManager.ActiveSection.CalloutBindings)
+            {
+                binding.TetherLengthIntensity = finalIntensity;
+            }
         }
     }
 }

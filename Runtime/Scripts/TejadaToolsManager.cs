@@ -27,7 +27,6 @@ public class TejadaToolsManager : VisualElement
         m_bridgeToggle = this.Q<Toggle>("BridgeToggle");
 
         m_roadsToggle?.RegisterCallback<ClickEvent>(ev => ToggleRoads());
-        m_markerToggle?.RegisterCallback<ClickEvent>(ev => HideLabelMarkers());
         m_bridgeToggle?.RegisterCallback<ClickEvent>(ev => ToggleBridge());
     }
 
@@ -43,17 +42,6 @@ public class TejadaToolsManager : VisualElement
         }
     }
 
-    void HideLabelMarkers()
-    {
-        if (!m_markerToggle.value)
-        {
-            uI_Manager.projectManager.ActiveSection.Markers.SetActive(true);
-        }
-        if (m_markerToggle.value)
-        {
-            uI_Manager.projectManager.ActiveSection.Markers.SetActive(false);
-        }
-    }
 
     void ToggleBridge()
     {
