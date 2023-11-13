@@ -11,6 +11,7 @@ public class CalloutBinding : MonoBehaviour
     public PresentationSection Section;
 
     public string QueryName = "";
+    public string CalloutText;
 
     private ProjectManager projectManager;
 
@@ -41,6 +42,10 @@ public class CalloutBinding : MonoBehaviour
     [Range (0,1)]
     public float CalloutAngle;
 
+    public Color Color;
+
+    public float lineThickeness;
+
     [Range(0, 100)]
     public float CalloutMargin;
 
@@ -53,39 +58,123 @@ public class CalloutBinding : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void OnEnable()
-    {
 
+    private void Start()
+    {
         if (projectManager == null)
         {
             projectManager = GameObject.FindAnyObjectByType<ProjectManager>();
         }
-    }
-    private void OnDestroy()
-    {
-        if (AddedToSection && Section != null)
-        {
-            foreach (PresentationSection section in projectManager.Sections)
-            {
-                if (section == Section)
-                {
-                    section.CalloutBindings.Remove(this);
-                }
-            }
-            AddedToSection = false;
-        }
-    }
-    private void OnValidate()
-    {
+
         float max = 100 - CalloutMargin;
         float min = 0 + CalloutMargin;
 
-        float positiveXClamp = Map(min, max,0, 0.25f,max, min, 0.5f, 0.75f,CalloutAngle);
-        float positiveYClamp = Map(min, max,0.25f,0.5f,max, min, 0.75f, 1,CalloutAngle);
-
+        float positiveXClamp = Map(min, max, 0, 0.25f, max, min, 0.5f, 0.75f, CalloutAngle);
+        float positiveYClamp = Map(min, max, 0.25f, 0.5f, max, min, 0.75f, 1, CalloutAngle);
 
         CalloutXPosition = Mathf.Clamp(positiveXClamp, min, max);
         CalloutYPosition = Mathf.Clamp(positiveYClamp, min, max);
+        UpdateLine();
+    }
+    private void UpdateLine()
+    {
+        calloutContainer = Section.CalloutCanvasDocument.rootVisualElement.Q<CalloutManager>(QueryName);
+
+        if (calloutContainer != null)
+        {
+            calloutContainer.m_labelPoint = calloutContainer.Q<VisualElement>("LabelPoint");
+            calloutContainer.m_label = calloutContainer.Q<VisualElement>("Label");
+            calloutContainer.m_text = calloutContainer.Q<Label>("Text");
+
+            calloutContainer.m_text.text = CalloutText;
+            calloutContainer.thickness = lineThickeness;
+
+            calloutContainer.LineColor = Color;
+            calloutContainer.m_text.style.backgroundColor = Color;
+            calloutContainer.m_text.style.borderBottomColor = Color;
+
+            calloutContainer.m_text.style.borderTopColor = GetOppositeColor(Color);
+            calloutContainer.m_text.style.borderLeftColor = GetOppositeColor(Color);
+            calloutContainer.m_text.style.borderRightColor = GetOppositeColor(Color);
+            calloutContainer.m_text.style.borderBottomColor = GetOppositeColor(Color);
+
+            calloutContainer.m_labelPoint.style.borderTopColor = GetOppositeColor(Color);
+            calloutContainer.m_labelPoint.style.borderLeftColor = GetOppositeColor(Color);
+            calloutContainer.m_labelPoint.style.borderRightColor = GetOppositeColor(Color);
+            calloutContainer.m_labelPoint.style.borderBottomColor = GetOppositeColor(Color);
+
+            calloutContainer.m_labelPoint.style.backgroundColor = Color;
+            calloutContainer.m_text.style.color = GetOppositeColor(Color);
+            calloutContainer.LineOutlineColor = GetOppositeColor(Color);
+        }
+    }
+#if UNITY_EDITOR
+    void OnEnable()
+    {
+        if (!Application.isPlaying)
+        {
+            if (projectManager == null)
+            {
+                projectManager = GameObject.FindAnyObjectByType<ProjectManager>();
+            }
+
+
+            
+        }
+        
+    }
+
+
+    private void OnDestroy()
+    {
+        if (!Application.isPlaying)
+        {
+            if (AddedToSection && Section != null)
+            {
+                foreach (PresentationSection section in projectManager.Sections)
+                {
+                    if (section == Section)
+                    {
+                        section.CalloutBindings.Remove(this);
+                    }
+                }
+                AddedToSection = false;
+            }
+        }
+    }
+    
+    private void OnValidate()
+    {
+
+        if(!Application.isPlaying)
+        {
+            float max = 100 - CalloutMargin;
+            float min = 0 + CalloutMargin;
+
+             float positiveXClamp = Map(min, max, 0, 0.25f, max, min, 0.5f, 0.75f, CalloutAngle);
+            float positiveYClamp = Map(min, max, 0.25f, 0.5f, max, min, 0.75f, 1, CalloutAngle);
+
+
+            CalloutXPosition = Mathf.Clamp(positiveXClamp, min, max);
+            CalloutYPosition = Mathf.Clamp(positiveYClamp, min, max);
+
+            calloutContainer = Section.CalloutCanvasDocument.rootVisualElement.Q<CalloutManager>(QueryName);
+
+            UpdateLine();
+        }
+        
+    }
+#endif
+    public Color GetOppositeColor(Color inputColor)
+    {
+        // Calculate the opposite color by subtracting each channel from 1.0
+        float oppositeR = 1.0f - inputColor.r;
+        float oppositeG = 1.0f - inputColor.g;
+        float oppositeB = 1.0f - inputColor.b;
+
+        // Create and return the opposite color
+        Color oppositeColor = new Color(oppositeR, oppositeG, oppositeB, inputColor.a);
+        return oppositeColor;
     }
 
     public float Map(float from, float to, float from2, float to2, float from3, float to3, float from4, float to4, float value)
@@ -123,13 +212,29 @@ public class CalloutBinding : MonoBehaviour
         }
     }
 // Update is called once per frame
-void Update()
+    void Update()
     {
+
+
+
 #if UNITY_EDITOR
         if (projectManager == null)
         {
             projectManager = GameObject.FindAnyObjectByType<ProjectManager>();
         }
+
+        foreach (PresentationSection section in projectManager.Sections)
+        {
+            if (section == Section)
+            {
+                if (!section.CalloutBindings.Contains(this))
+                {
+                    section.CalloutBindings.Add(this);
+                    Debug.Log("Your binding is not listed in this section!!!!!!!!!");
+                }
+            }
+        }
+
         if (!AddedToSection && Section != null)
         {
             foreach (PresentationSection section in projectManager.Sections)
@@ -157,7 +262,7 @@ void Update()
                 }
             }
         }
-
+        
         if (calloutContainer != null)
         {
             calloutContainer.MarkDirtyRepaint();

@@ -264,8 +264,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5416589932720934968}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.01398062, y: 0.97717965, z: -0.06805962, w: 0.20072964}
-  m_LocalPosition: {x: -5.710741, y: 5.7139683, z: 14.245401}
+  m_LocalRotation: {x: 0.020253114, y: 0.84876674, z: -0.52737314, w: 0.032595858}
+  m_LocalPosition: {x: 2.5406685, y: 275.07385, z: 118.85648}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -518,6 +518,7 @@ GameObject:
   - component: {fileID: 1220773643378972553}
   - component: {fileID: 8033358486754560975}
   - component: {fileID: 8012659720950544012}
+  - component: {fileID: 8824048352028404008}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -525,14 +526,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7958332000044547240
-Transform:
+--- !u!224 &7958332000044547240
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6141128954258956312}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -540,6 +540,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1844946468954596450}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!81 &1220773643378972553
 AudioListener:
   m_ObjectHideFlags: 0
@@ -643,6 +648,22 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &8824048352028404008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141128954258956312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &6264470082009557599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,6 +1098,7 @@ MonoBehaviour:
   quitScreen: 0
   OriginalCameraPosition: {x: 0, y: 0, z: 0}
   OriginalCameraRotation: {x: 0, y: 0, z: 0, w: 0}
+  CurrentTimeline: {fileID: 0}
   InitializeCinemachineVariables: 0
   actTime: 0
   canScrub: 0
@@ -1084,7 +1106,9 @@ MonoBehaviour:
   TimelineActive: 0
   TimelinePaused: 0
   CheckForEnd: 1
+  CheckForTransitionEnd: 0
   TimelineEnded: 0
+  FreezeTimeline: 0
   TitleDimensions: {x: 0, y: 0}
   ThemeSetting: 0
   screenSetting: 0
@@ -1203,7 +1227,7 @@ MonoBehaviour:
   PictureLabelPrefab: {fileID: 1791842658040416805, guid: b33b73a4efafe534aa3416b17c65e741, type: 3}
   CalloutUXMLTemplate: {fileID: 9197481963319205126, guid: 1e5fa3bbfd8173845b1ff63e1efeb22d, type: 3}
   Brain: {fileID: 0}
-  MainCameraTransform: {fileID: 7958332000044547240}
+  MainCameraTransform: {fileID: 0}
   CinemahcineManager: {fileID: 6783346514208939001}
   currentProject: 
   Sections: []
